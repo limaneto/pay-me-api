@@ -1,0 +1,14 @@
+{
+  "500": "Servidor está momentaneamente indisponível",
+  "registered": "%{model} registrado com sucesso",
+  "deleted": "%{model} deletado com sucesso",
+  "edited": "%{model} atualizado com sucesso",
+  "logged": "%{model} logado com sucesso",
+  "password-wrong": "Senha incorreta",
+  "model-not-found": "%{model} não foi encontrado",
+  "field-required": "%{field} é um campo obrigatório",
+  "path-not-found": "%{path} não encontrado",
+  "company": "Empresa",
+  "password": "Senha",
+  "user": "Usuário"
+}
