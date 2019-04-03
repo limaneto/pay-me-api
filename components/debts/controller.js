@@ -1,8 +1,8 @@
-const Offer = require('./model');
+const Debt = require('./model');
 
 const save = (req, res, next, ...arguments) => {
-  const offer = new Offer(req.body);
-  offer.save((err, savedOffer) => {
+  const debt = new Debt(req.body);
+  debt.save((err, savedDebt) => {
     if (err) {
       if (err.name === 'ValidationError') {
         res.status(400).json({ errors: err.errors });
@@ -10,7 +10,7 @@ const save = (req, res, next, ...arguments) => {
         res.status(500).json({ message: polyglot.t('500') });
       }
     } else {
-      res.status(201).json({ remember: savedOffer.toJSON(), message: polyglot.t('registered', { model: 'Offer'}) });
+      res.status(201).json({ remember: savedDebt.toJSON(), message: polyglot.t('registered', { model: 'Debt'}) });
     }
   });
 };
@@ -18,25 +18,25 @@ const save = (req, res, next, ...arguments) => {
 const getAll = (req, res, next, ...arguments) => {
   const limit = +req.query.limit || 10;
   const page = (+req.query.page > 0 ? +req.query.page : 1) - 1;
-  Offer
+  Debt
     .find()
     .sort({ createdAt: -1 })
     .limit(limit)
     .skip(limit * page)
-    .exec((err, offers) => {
+    .exec((err, debts) => {
       if (err) {
         return res.status(500).json({ message: polyglot.t('500') });
       }
       return res.json({
         page: page + 1,
         pages: Math.ceil(count / limit),
-        offers,
+        debts,
       });
     });
 };
 
 const update = (req, res, next, ...arguments) => {
-  var query = Offer.findById(req.)
+  var query = Debt.findById(req.)
 };
 
 module.exports = { save, getAll };

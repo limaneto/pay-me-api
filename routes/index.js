@@ -1,7 +1,7 @@
-const offer = require('../components/offers/route');
+const debt = require('../components/debts/route');
 const user = require('../components/user/route');
 
 module.exports = (...arguments) => {
-  offer(...arguments);
+  debt(...arguments);
   user(...arguments);
 };

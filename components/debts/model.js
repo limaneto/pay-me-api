@@ -1,7 +1,7 @@
 /* eslint-disable object-curly-newline */
 const mongoose = require('mongoose');
 
-const OfferSchema = new mongoose.Schema({
+const DebtSchema = new mongoose.Schema({
   title: { type: String, minlength: 10, maxlength: 100, trim: true, required: false },
   description: { type: String, minlength: 20, maxlength: 700, trim: true, required: false },
   salary: { type: Number, require: false },
@@ -13,10 +13,10 @@ const OfferSchema = new mongoose.Schema({
   expired: { type: Boolean, required: false },
 });
 
-OfferSchema.methods.toJSON = function toJSON() {
-  const offer = this.toObject();
-  delete offer.__v;
-  return offer;
+DebtSchema.methods.toJSON = function toJSON() {
+  const debt = this.toObject();
+  delete debt.__v;
+  return debt;
 };
 
-module.exports = mongoose.model('Offer', OfferSchema);
+module.exports = mongoose.model('Debt', DebtSchema);
