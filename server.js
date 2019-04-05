@@ -29,7 +29,7 @@ db.once('open', () => {
 });
 
 app.get('/', (req, res) => {
-  res.send('I hit / path\n'.magenta);
+  res.send('I hit / path\n');
 });
 
 app.listen(app.get('port'), () => {
