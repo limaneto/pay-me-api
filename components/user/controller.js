@@ -1,6 +1,6 @@
 const User = require('./model');
 
-const login = (req, res, next, ...args) => {
+const login = (req, res, next, polyglot) => {
   const { email, password } = req.body;
   User
     .findOne({ email })
@@ -20,7 +20,7 @@ const login = (req, res, next, ...args) => {
     .catch(err => next(err));
 };
 
-const save = (req, res, next, ...args) => {
+const save = (req, res, next, polyglot) => {
   if (!req.body.password) {
     return res.status(400).json({ errors: { message: polyglot.t('field-required', { field: polyglot.t('password') }) } });
   }
@@ -31,6 +31,11 @@ const save = (req, res, next, ...args) => {
       if (err.name === 'ValidationError') {
         return res.status(400).json({ errors: err.errors });
       }
+
+      if (err.name === 'MongoError' && err.code === 11000) {
+        return res.status(400).json({ message: `Email ${req.body.email} already being used.` });
+      }
+
       return res.status(500).json({ message: polyglot.t('500') });
     }
 

@@ -1,7 +1,6 @@
 const { save, login } = require('./controller');
 
-module.exports = (...args) => {
-  const app = args[0];
-  app.post('/api/users', (req, res, next) => save(req, res, next, ...args));
-  app.post('/api/login', (req, res, next) => login(req, res, next, ...args));
+module.exports = (app, polyglot) => {
+  app.post('/api/users', (req, res, next) => save(req, res, next, polyglot));
+  app.post('/api/login', (req, res, next) => login(req, res, next, polyglot));
 };
