@@ -1,6 +1,6 @@
 const User = require('./model');
 
-const login = (req, res, next, ...arguments) => {
+const login = (req, res, next, ...args) => {
   const { email, password } = req.body;
   User
     .findOne({ email })
@@ -20,7 +20,7 @@ const login = (req, res, next, ...arguments) => {
     .catch(err => next(err));
 };
 
-const save = (req, res, next, ...arguments) => {
+const save = (req, res, next, ...args) => {
   if (!req.body.password) {
     return res.status(400).json({ errors: { message: polyglot.t('field-required', { field: polyglot.t('password') }) } });
   }

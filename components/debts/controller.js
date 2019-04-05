@@ -1,6 +1,6 @@
 const Debt = require('./model');
 
-const save = (req, res, next, ...arguments) => {
+const save = (req, res, next, ...args) => {
   const debt = new Debt(req.body);
   debt.save((err, savedDebt) => {
     if (err) {
@@ -15,7 +15,7 @@ const save = (req, res, next, ...arguments) => {
   });
 };
 
-const getAll = (req, res, next, ...arguments) => {
+const getAll = (req, res, next, ...args) => {
   const limit = +req.query.limit || 10;
   const page = (+req.query.page > 0 ? +req.query.page : 1) - 1;
   Debt
@@ -35,8 +35,8 @@ const getAll = (req, res, next, ...arguments) => {
     });
 };
 
-const update = (req, res, next, ...arguments) => {
-  var query = Debt.findById(req.)
+const update = (req, res, next, ...args) => {
+  // var query = Debt.findById(req.)
 };
 
 module.exports = { save, getAll };
