@@ -9,12 +9,12 @@ const login = (req, res, next, polyglot) => {
         const passwordCheck = user.validatePassword(password);
         if (passwordCheck) {
           const newToken = user.generateJWT();
-          res.status(200).json({ message: polyglot.t('logged', { model: 'User' }), token: newToken });
+          res.status(200).json({ message: polyglot.t('logged', { model: 'CustomUser' }), token: newToken });
         } else {
           res.status(400).json({ message: polyglot.t('password-wrong') });
         }
       } else {
-        res.status(400).json({ message: polyglot.t('path-not-found', { path: 'User' }) });
+        res.status(400).json({ message: polyglot.t('path-not-found', { path: 'CustomUser' }) });
       }
     })
     .catch(err => next(err));

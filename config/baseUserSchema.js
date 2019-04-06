@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-newline */
 const mongoose = require('mongoose');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
@@ -38,6 +39,6 @@ BaseUserSchema.methods.toAuthJSON = function toAuthJSON() {
   };
 };
 
-const BaseUser = mongoose.model('BaseUserSchema', BaseUserSchema);
+const BaseUser = mongoose.model('BaseUser', BaseUserSchema);
 
 module.exports = BaseUser;

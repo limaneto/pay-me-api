@@ -3,4 +3,4 @@ const BaseUserModel = require('../../config/baseUserSchema');
 
 const UserSchema = new mongoose.Schema();
 
-module.exports = BaseUserModel.discriminator('User', UserSchema);
+module.exports = BaseUserModel.discriminator('UserCustom', UserSchema);
