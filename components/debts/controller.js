@@ -10,7 +10,7 @@ const save = (req, res, next, polyglot) => {
         res.status(500).json({ message: polyglot.t('500') });
       }
     } else {
-      res.status(201).json({ debt: savedDebt.toJSON(), message: polyglot.t('registered', { model: 'Debt' }) });
+      res.status(201).json({ debt: savedDebt.toJSON(), message: polyglot.t('registered', { model: polyglot.t('debt') }) });
     }
   });
 };
