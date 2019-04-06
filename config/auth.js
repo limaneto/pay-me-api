@@ -7,8 +7,7 @@ const secretOrKey = process.env.AUTH_SECRET;
 
 const JWTStrategy = new Strategy({ jwtFromRequest, secretOrKey }, (payload, done) => {
   User
-    .findById(payload.id)
-    .then((err, user) => {
+    .findById(payload.id, (err, user) => {
       if (err) done(err, false);
       if (user) done(null, user);
       else done(null, false);
