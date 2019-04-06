@@ -2,8 +2,8 @@
 const mongoose = require('mongoose');
 
 const DebtSchema = new mongoose.Schema({
-  debtor: { type: mongoose.Schema.Types.ObjectId, ref: 'CustomUser' },
-  creditor: { type: mongoose.Schema.Types.ObjectId, ref: 'CustomUser' },
+  debtor: { type: mongoose.Schema.Types.ObjectId, ref: 'CustomUser', required: true },
+  creditor: { type: mongoose.Schema.Types.ObjectId, ref: 'CustomUser', required: true },
   title: { type: String, minlength: 10, maxlength: 100, trim: true, required: false },
   description: { type: String, minlength: 20, maxlength: 700, trim: true, required: false },
   valueInitial: { type: Number, required: true },
