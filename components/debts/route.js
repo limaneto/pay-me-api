@@ -1,6 +1,6 @@
 const { save, getAll } = require('./controller');
 const auth = require('../../config/auth');
-const { genericValidator, addDebtValidator } = require('./validate');
+const { addDebtValidator } = require('./validate');
 
 module.exports = (app, polyglot) => {
 	app.route('/api/debts(/:id)?')
