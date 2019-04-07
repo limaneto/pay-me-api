@@ -10,14 +10,26 @@ function acceptDebtOrCredit(body) {
 	}
 }
 
+function addDebtorOrCreditorId(req) {
+	const { user, body } = req;
+	if (body.debtor) {
+		return { creditor: user._id };
+	}
+
+	if (body.creditor) {
+		return { debtor: user._id };
+	}
+}
+
 const save = (req, res, next, polyglot) => {
 	let debt = new Debt(req.body);
 	debt = Object.assign(debt, acceptDebtOrCredit(req.body));
+	debt = Object.assign(debt, addDebtorOrCreditorId(req));
 	debt.save((err, savedDebt) => {
 		if (err) {
 			return next(err);
 		}
-		res.status(201).json({ debt: savedDebt.toJSON(), message: polyglot.t('registered', { model: polyglot.t('debt') }) });
+		res.status(201).json({ data: { debt: savedDebt.toJSON(), message: polyglot.t('registered', { model: polyglot.t('debt') }) } });
 	});
 };
 

@@ -1,4 +1,3 @@
-/* eslint-disable object-curly-newline */
 const mongoose = require('mongoose');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
@@ -10,7 +9,9 @@ function isValidEmail(email) {
 }
 
 const BaseUserSchema = new mongoose.Schema({
-	email: { type: String, lowercase: true, required: true, unique: true, minlength: 1, maxlength: 100, trim: true, validate: [isValidEmail, 'Invalid email.'] },
+	email: {
+		type: String, lowercase: true, required: true, unique: true, minlength: 1, maxlength: 100, trim: true, validate: [isValidEmail, 'Invalid email.'],
+	},
 	hash: String,
 	salt: String,
 }, { discriminatorKey: 'kind' });
@@ -36,6 +37,7 @@ BaseUserSchema.methods.toAuthJSON = function toAuthJSON() {
 	return {
 		_id: this._id,
 		email: this.email,
+		username: this.username,
 		token: this.generateJWT(),
 	};
 };

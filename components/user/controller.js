@@ -26,7 +26,7 @@ const save = (req, res, next, polyglot) => {
 	}
 	const user = new User(req.body);
 	user.setPassword(req.body.password);
-	user.save((err) => {
+	user.save((err, userSaved) => {
 		if (err) {
 			if (err.name === 'ValidationError') {
 				return res.status(400).json({ errors: err.errors });
@@ -38,8 +38,8 @@ const save = (req, res, next, polyglot) => {
 
 			return res.status(500).json({ message: polyglot.t('500') });
 		}
-
-		return res.send({ message: polyglot.t('registered', { model: polyglot.t('user') }), user: user.toAuthJSON() });
+		console.log('USER: '.blue, userSaved);
+		return res.send({ message: polyglot.t('registered', { model: polyglot.t('user') }), user: userSaved.toAuthJSON() });
 	});
 };
 
