@@ -5,7 +5,7 @@ const helmet = require('helmet');
 const Polyglot = require('node-polyglot');
 const mongoose = require('./database/mongoose');
 const routes = require('./routes');
-const handleError = require('./config/handleError');
+const handleError = require('./utils/errorHandler');
 const auth = require('./config/auth');
 
 require('dotenv').config();

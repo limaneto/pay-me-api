@@ -1,4 +1,4 @@
-const ApiError = require('../../utils/ApiError');
+const InvalidParameters = require('../../errors/InvalidParameters');
 
 function hasCreditor(requestBody) {
 	return !!requestBody.creditor;
@@ -10,11 +10,15 @@ function hasDebtor(requestBody) {
 
 function addDebtValidator(req, res, next) {
 	const { body } = req;
-	if (!hasCreditor(body) && !hasDebtor(body)) {
-		const error = new ApiError('Pass at least a creditor or a debitor', 400);
-		return next(error);
+	if (hasCreditor(body) || hasDebtor(body)) {
+		return next();
 	}
-	return next();
+
+	const error = new InvalidParameters({
+		creditor: 'Inform Creditor if Debtor is empty.',
+		debtor: 'Inform Debtor if Creditor is empty.',
+	}, 'Creditor or debtor is required.');
+	res.status(400).send({ error });
 }
 
 function genericValidator(req, res, next) {
