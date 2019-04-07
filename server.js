@@ -25,15 +25,15 @@ const db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 db.once('open', () => {
-  console.log('Database connected'.blue);
+	console.log('Database connected'.blue);
 });
 
 app.get('/', (req, res) => {
-  res.send('I hit / path\n');
+	res.send('I hit / path\n');
 });
 
 app.listen(app.get('port'), () => {
-  console.log(`I am alive on port ${app.get('port')}.\n`.green);
+	console.log(`I am alive on port ${app.get('port')}.\n`.green);
 });
 
 routes(app, polyglot);
