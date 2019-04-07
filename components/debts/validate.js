@@ -21,8 +21,4 @@ function addDebtValidator(req, res, next) {
 	res.status(400).send({ error });
 }
 
-function genericValidator(req, res, next) {
-	return next();
-}
-
-module.exports = { genericValidator, addDebtValidator };
+module.exports = { addDebtValidator };
