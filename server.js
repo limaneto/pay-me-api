@@ -5,6 +5,7 @@ const helmet = require('helmet');
 const Polyglot = require('node-polyglot');
 const mongoose = require('./database/mongoose');
 const routes = require('./routes');
+const handleError = require('./config/handleError');
 const auth = require('./config/auth');
 
 require('dotenv').config();
@@ -37,3 +38,4 @@ app.listen(app.get('port'), () => {
 });
 
 routes(app, polyglot);
+handleError(app);
