@@ -1,5 +1,5 @@
 const {
-	save, getAllByUser, getAllDebts, getAllCreditsByUser,
+	save, getAllByUser, getAllDebts, getAllCreditsByUser, getAllDebtsByUser,
 } = require('./controller');
 const auth = require('../../config/auth');
 const { addDebtValidator } = require('./validate');
@@ -13,6 +13,10 @@ module.exports = (app, polyglot) => {
 	app.route('/api/debts/my/credits')
 		.all(auth.authenticate())
 		.get((req, res, next) => getAllCreditsByUser(req, res, next, polyglot));
+
+	app.route('/api/debts/my')
+		.all(auth.authenticate())
+		.get((req, res, next) => getAllDebtsByUser(req, res, next, polyglot));
 
 	app.route('/api/debts(/:id)?')
 		.all(auth.authenticate())
