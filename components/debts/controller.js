@@ -60,6 +60,27 @@ const getAllByUser = (req, res, next, polyglot) => {
 		});
 };
 
+const getAllCreditsByUser = (req, res, next, polyglot) => {
+	const limit = +req.query.limit || 10;
+	const page = (+req.query.page > 0 ? +req.query.page : 1) - 1;
+	const { user } = req;
+	Debt
+		.find()
+		.where({ creditor: user._id })
+		.sort({ createdAt: -1 })
+		.limit(limit)
+		.skip(limit * page)
+		.lean()
+		.exec((err, debts) => {
+			if (err) {
+				return res.status(500).json({ message: polyglot.t('500') });
+			}
+
+			const metadata = { page: page + 1 };
+			return res.json({ data: { debts }, metadata });
+		});
+};
+
 const getAllDebts = (req, res, next, polyglot) => {
 	const limit = +req.query.limit || 10;
 	const page = (+req.query.page > 0 ? +req.query.page : 1) - 1;
@@ -80,4 +101,6 @@ const getAllDebts = (req, res, next, polyglot) => {
 };
 
 
-module.exports = { save, getAllByUser, getAllDebts };
+module.exports = {
+	save, getAllByUser, getAllDebts, getAllCreditsByUser,
+};
