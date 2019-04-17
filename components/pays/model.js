@@ -1,7 +1,7 @@
 /* eslint-disable object-curly-newline */
 const mongoose = require('mongoose');
 
-const DebtSchema = new mongoose.Schema({
+const PaySchema = new mongoose.Schema({
 	creator: { type: mongoose.Schema.Types.ObjectId, ref: 'CustomUser' },
 	debtor: { type: mongoose.Schema.Types.ObjectId, ref: 'CustomUser' },
 	creditor: { type: mongoose.Schema.Types.ObjectId, ref: 'CustomUser' },
@@ -20,10 +20,10 @@ const DebtSchema = new mongoose.Schema({
 	],
 });
 
-DebtSchema.methods.toJSON = function toJSON() {
-	const debt = this.toObject();
-	delete debt.__v;
-	return debt;
+PaySchema.methods.toJSON = function toJSON() {
+	const pay = this.toObject();
+	delete pay.__v;
+	return pay;
 };
 
-module.exports = mongoose.model('Debt', DebtSchema);
+module.exports = mongoose.model('Pay', PaySchema);

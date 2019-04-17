@@ -1,4 +1,4 @@
-const Debt = require('./model');
+const Pay = require('./model');
 
 function acceptDebtOrCredit(body) {
 	if (body.debtor) {
@@ -27,15 +27,15 @@ function addCreator(req) {
 }
 
 const save = (req, res, next, polyglot) => {
-	let debt = new Debt(req.body);
-	debt = Object.assign(debt, acceptDebtOrCredit(req.body));
-	debt = Object.assign(debt, addDebtorOrCreditorId(req));
-	debt = Object.assign(debt, addCreator(req));
-	debt.save((err, savedDebt) => {
+	let pay = new Pay(req.body);
+	pay = Object.assign(pay, acceptDebtOrCredit(req.body));
+	pay = Object.assign(pay, addDebtorOrCreditorId(req));
+	pay = Object.assign(pay, addCreator(req));
+	pay.save((err, savedPay) => {
 		if (err) {
 			return next(err);
 		}
-		res.status(201).json({ data: { debt: savedDebt.toJSON(), message: polyglot.t('registered', { model: polyglot.t('debt') }) } });
+		res.status(201).json({ data: { pay: savedPay.toJSON(), message: polyglot.t('registered', { model: polyglot.t('debt') }) } });
 	});
 };
 
@@ -43,7 +43,7 @@ const getAllByUser = (req, res, next, polyglot) => {
 	const limit = +req.query.limit || 10;
 	const page = (+req.query.page > 0 ? +req.query.page : 1) - 1;
 	const { user } = req;
-	Debt
+	Pay
 		.find()
 		.or([{ creditor: user._id }, { debtor: user._id }])
 		.sort({ createdAt: -1 })
@@ -60,24 +60,43 @@ const getAllByUser = (req, res, next, polyglot) => {
 		});
 };
 
+const getAllPays = (req, res, next, polyglot) => {
+	const limit = +req.query.limit || 10;
+	const page = (+req.query.page > 0 ? +req.query.page : 1) - 1;
+	Pay
+		.find()
+		.sort({ createdAt: -1 })
+		.limit(limit)
+		.skip(limit * page)
+		.lean()
+		.exec((err, pays) => {
+			if (err) {
+				return res.status(500).json({ message: polyglot.t('500') });
+			}
+
+			const metadata = { page: page + 1 };
+			return res.json({ data: { pays }, metadata });
+		});
+};
+
 const getAllCreditsByUser = (req, res, next, polyglot) => {
 	const limit = +req.query.limit || 10;
 	const page = (+req.query.page > 0 ? +req.query.page : 1) - 1;
 	const { user } = req;
-	Debt
+	Pay
 		.find()
 		.where({ creditor: user._id })
 		.sort({ createdAt: -1 })
 		.limit(limit)
 		.skip(limit * page)
 		.lean()
-		.exec((err, debts) => {
+		.exec((err, pays) => {
 			if (err) {
 				return res.status(500).json({ message: polyglot.t('500') });
 			}
 
 			const metadata = { page: page + 1 };
-			return res.json({ data: { debts }, metadata });
+			return res.json({ data: { pays }, metadata });
 		});
 };
 
@@ -85,43 +104,24 @@ const getAllDebtsByUser = (req, res, next, polyglot) => {
 	const limit = +req.query.limit || 10;
 	const page = (+req.query.page > 0 ? +req.query.page : 1) - 1;
 	const { user } = req;
-	Debt
+	Pay
 		.find()
 		.where({ debtor: user._id })
 		.sort({ createdAt: -1 })
 		.limit(limit)
 		.skip(limit * page)
 		.lean()
-		.exec((err, debts) => {
+		.exec((err, pays) => {
 			if (err) {
 				return res.status(500).json({ message: polyglot.t('500') });
 			}
 
 			const metadata = { page: page + 1 };
-			return res.json({ data: { debts }, metadata });
-		});
-};
-
-const getAllDebts = (req, res, next, polyglot) => {
-	const limit = +req.query.limit || 10;
-	const page = (+req.query.page > 0 ? +req.query.page : 1) - 1;
-	Debt
-		.find()
-		.sort({ createdAt: -1 })
-		.limit(limit)
-		.skip(limit * page)
-		.lean()
-		.exec((err, debts) => {
-			if (err) {
-				return res.status(500).json({ message: polyglot.t('500') });
-			}
-
-			const metadata = { page: page + 1 };
-			return res.json({ data: { debts }, metadata });
+			return res.json({ data: { pays }, metadata });
 		});
 };
 
 
 module.exports = {
-	save, getAllByUser, getAllDebts, getAllCreditsByUser, getAllDebtsByUser,
+	save, getAllByUser, getAllPays, getAllCreditsByUser, getAllDebtsByUser,
 };

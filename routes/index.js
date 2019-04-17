@@ -1,4 +1,4 @@
-const debt = require('../components/debts/route');
+const debt = require('../components/pays/route');
 const user = require('../components/user/route');
 
 module.exports = (app, polyglot) => {

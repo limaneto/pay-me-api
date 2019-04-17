@@ -8,7 +8,7 @@ function hasDebtor(requestBody) {
 	return !!requestBody.debtor;
 }
 
-function addDebtValidator(req, res, next) {
+function addPayValidator(req, res, next) {
 	const { body } = req;
 	if (hasCreditor(body) || hasDebtor(body)) {
 		return next();
@@ -21,4 +21,4 @@ function addDebtValidator(req, res, next) {
 	res.status(400).send({ error });
 }
 
-module.exports = { addDebtValidator };
+module.exports = { addPayValidator };
