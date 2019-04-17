@@ -45,11 +45,9 @@ const getAll = (req, res, next, polyglot) => {
 			if (err) {
 				return res.status(500).json({ message: polyglot.t('500') });
 			}
-			return res.json({
-				page: page + 1,
-				pages: Math.ceil(count / limit),
-				debts,
-			});
+
+			const metadata = { page: page + 1 };
+			return res.json({ data: { debts }, metadata });
 		});
 };
 
