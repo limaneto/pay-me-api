@@ -50,13 +50,13 @@ const getAllByUser = (req, res, next, polyglot) => {
 		.limit(limit)
 		.skip(limit * page)
 		.lean()
-		.exec((err, debts) => {
+		.exec((err, pays) => {
 			if (err) {
 				return res.status(500).json({ message: polyglot.t('500') });
 			}
 
 			const metadata = { page: page + 1 };
-			return res.json({ data: { debts }, metadata });
+			return res.json({ pays, metadata });
 		});
 };
 
@@ -75,7 +75,7 @@ const getAllPays = (req, res, next, polyglot) => {
 			}
 
 			const metadata = { page: page + 1 };
-			return res.json({ data: { pays }, metadata });
+			return res.json({ pays, metadata });
 		});
 };
 
@@ -96,7 +96,7 @@ const getAllCreditsByUser = (req, res, next, polyglot) => {
 			}
 
 			const metadata = { page: page + 1 };
-			return res.json({ data: { pays }, metadata });
+			return res.json({ pays, metadata });
 		});
 };
 
@@ -117,7 +117,7 @@ const getAllDebtsByUser = (req, res, next, polyglot) => {
 			}
 
 			const metadata = { page: page + 1 };
-			return res.json({ data: { pays }, metadata });
+			return res.json({ pays, metadata });
 		});
 };
 
