@@ -2,6 +2,7 @@
 const mongoose = require('mongoose');
 
 const DebtSchema = new mongoose.Schema({
+	creator: { type: mongoose.Schema.Types.ObjectId, ref: 'CustomUser' },
 	debtor: { type: mongoose.Schema.Types.ObjectId, ref: 'CustomUser' },
 	creditor: { type: mongoose.Schema.Types.ObjectId, ref: 'CustomUser' },
 	debtAccepted: { type: Boolean, default: false },

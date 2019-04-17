@@ -21,10 +21,16 @@ function addDebtorOrCreditorId(req) {
 	}
 }
 
+function addCreator(req) {
+	const { user } = req;
+	return { creator: user._id };
+}
+
 const save = (req, res, next, polyglot) => {
 	let debt = new Debt(req.body);
 	debt = Object.assign(debt, acceptDebtOrCredit(req.body));
 	debt = Object.assign(debt, addDebtorOrCreditorId(req));
+	debt = Object.assign(debt, addCreator(req));
 	debt.save((err, savedDebt) => {
 		if (err) {
 			return next(err);
