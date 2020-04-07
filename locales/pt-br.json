@@ -9,6 +9,8 @@
   "field-required": "%{field} é um campo obrigatório",
   "path-not-found": "%{path} não encontrado",
   "password": "Senha",
+  "firstName": "Primeiro nome",
+  "lastName": "Primeiro nome",
   "pay": "Pagamento",
   "debt": "Dívida",
   "user": "Usuário"
