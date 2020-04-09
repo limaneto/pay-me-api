@@ -1,4 +1,4 @@
-const Pay = require('./model');
+const { Pay } = require('../../models');
 
 function acceptDebtOrCredit(body) {
 	if (body.debtor) {
