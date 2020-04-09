@@ -1,5 +1,8 @@
 const generateMessage = (polyglot, type, field) => {
-	return polyglot.t(type, { field: polyglot.t(field) })
+	if (field) {
+		return polyglot.t(type, { field: polyglot.t(field) });
+	}
+	return polyglot.t(type);
 };
 
 module.exports = {
