@@ -1,4 +1,4 @@
-const generateMessage = (polyglot,type, field) => {
+const generateMessage = (polyglot, type, field) => {
 	return polyglot.t(type, { field: polyglot.t(field) })
 };
 
