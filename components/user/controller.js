@@ -1,12 +1,12 @@
-const User = require('./model');
+const models = require('../../models');
 
 const login = (req, res, next, polyglot) => {
 	const { email, password } = req.body;
-	User
-		.findOne({ email })
+	models.User
+		.findOne({ where: { 'email': email } })
 		.then((user) => {
 			if (user) {
-				const passwordCheck = user.validatePassword(password);
+				const passwordCheck = user.isPasswordValid(password);
 				if (passwordCheck) {
 					const newToken = user.generateJWT();
 					res.status(200).json({ message: polyglot.t('logged', { model: 'CustomUser' }), token: newToken });
@@ -20,14 +20,20 @@ const login = (req, res, next, polyglot) => {
 		.catch(err => next(err));
 };
 
-const save = (req, res, next, polyglot) => {
+const save = async (req, res, next, polyglot) => {
 	if (!req.body.password) {
 		return res.status(400).json({ errors: { message: polyglot.t('field-required', { field: polyglot.t('password') }) } });
 	}
-	const user = new User(req.body);
-	user.setPassword(req.body.password);
-	user.save((err, userSaved) => {
-		if (err) {
+	if (!req.body.firstName) {
+		return res.status(400).json({ errors: { message: polyglot.t('field-required', { field: polyglot.t('firstName') }) } });
+	}
+	if (!req.body.email) {
+		return res.status(400).json({ errors: { message: polyglot.t('field-required', { field: polyglot.t('email') }) } });
+	}
+	try {
+		const user = await models.User.create(req.body);
+		return res.send({ message: polyglot.t('registered', { model: polyglot.t('user') }), user: user.toAuthJSON() });
+	} catch (err) {
 			if (err.name === 'ValidationError') {
 				return res.status(400).json({ errors: err.errors });
 			}
@@ -37,10 +43,7 @@ const save = (req, res, next, polyglot) => {
 			}
 
 			return res.status(500).json({ message: polyglot.t('500') });
-		}
-		console.log('USER: '.blue, userSaved);
-		return res.send({ message: polyglot.t('registered', { model: polyglot.t('user') }), user: userSaved.toAuthJSON() });
-	});
+	}
 };
 
 module.exports = { save, login };
