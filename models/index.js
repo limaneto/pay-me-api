@@ -13,11 +13,6 @@ const sequelize = new Sequelize(
 	}
 );
 
-// file => (file.indexOf('.') !== 0) arquivo que tem um ponto
-// file !== path.basename(__filename) não é esse arquivo index.js
-// file.slice(-3) === '.js' é um arquivo javascript
-// sequelize.import(path.join(__dirname, file)) junta o path com o nome do arquivo
-
 fs
 	.readdirSync(__dirname)
 	.filter(file => (file.indexOf('.') !== 0) && (file !== path.basename(__filename)) && (file.slice(-3) === '.js'))
