@@ -4,31 +4,35 @@ const login = (req, res, next, polyglot) => {
 	const { email, password } = req.body;
 	models.User
 		.findOne({ where: { 'email': email } })
-		.then((user) => {
+		.then(async (user) => {
 			if (user) {
-				const passwordCheck = user.isPasswordValid(password);
+				const passwordCheck = await user.isPasswordValid(password);
 				if (passwordCheck) {
 					const newToken = user.generateJWT();
-					res.status(200).json({ message: polyglot.t('logged', { model: 'CustomUser' }), token: newToken });
+					res.status(200).json({ message: polyglot.t('logged', { model: polyglot.t('user') }), token: newToken });
 				} else {
 					res.status(400).json({ message: polyglot.t('password-wrong') });
 				}
 			} else {
-				res.status(400).json({ message: polyglot.t('path-not-found', { path: 'CustomUser' }) });
+				res.status(400).json({ message: polyglot.t('path-not-found', { path: polyglot.t('user') }) });
 			}
 		})
 		.catch(err => next(err));
 };
 
+const fieldRequiredError = (field) => {
+	return res.status(400).json({ errors: { message: polyglot.t('field-required', { field: polyglot.t(field) }) } });
+};
+
 const save = async (req, res, next, polyglot) => {
 	if (!req.body.password) {
-		return res.status(400).json({ errors: { message: polyglot.t('field-required', { field: polyglot.t('password') }) } });
+		return fieldRequiredError('password');
 	}
 	if (!req.body.firstName) {
-		return res.status(400).json({ errors: { message: polyglot.t('field-required', { field: polyglot.t('firstName') }) } });
+		return fieldRequiredError('firstName');
 	}
 	if (!req.body.email) {
-		return res.status(400).json({ errors: { message: polyglot.t('field-required', { field: polyglot.t('email') }) } });
+		return fieldRequiredError('email');
 	}
 	try {
 		const user = await models.User.create(req.body);
