@@ -1,17 +1,19 @@
 {
   "500": "Servidor está momentaneamente indisponível",
-  "registered": "%{model} registrado com sucesso",
-  "deleted": "%{model} deletado com sucesso",
-  "edited": "%{model} atualizado com sucesso",
-  "logged": "%{model} logado com sucesso",
+  "registered": "%{field} registrado com sucesso",
+  "deleted": "%{field} deletado com sucesso",
+  "edited": "%{field} atualizado com sucesso",
+  "logged": "%{field} logado com sucesso",
   "password-wrong": "Senha incorreta",
-  "model-not-found": "%{model} não foi encontrado",
+  "model-not-found": "%{field} não foi encontrado",
+  "field-invalid": "%{field} inválido",
   "field-required": "%{field} é um campo obrigatório",
-  "path-not-found": "%{path} não encontrado",
+  "path-not-found": "%{field} não encontrado",
   "password": "Senha",
   "firstName": "Primeiro nome",
   "lastName": "Primeiro nome",
   "pay": "Pagamento",
   "debt": "Dívida",
-  "user": "Usuário"
+  "user": "Usuário",
+  "email": "Email"
 }

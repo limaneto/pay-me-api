@@ -34,4 +34,4 @@ models.sequelize.sync()
 	});
 
 routes(app, polyglot);
-handleError(app);
+handleError(app, polyglot);

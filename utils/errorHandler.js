@@ -1,33 +1,38 @@
-/* eslint-disable no-unused-vars */
-const InvalidParameters = require('../errors/InvalidParameters');
+const { InvalidParameters, ServerError } = require('../errors');
+const { ERROR_TYPES, POLYGLOT } = require('../utils/constants');
+const { generateMessage } = require('../utils/helpers');
 
+function handleInvalidParameterError(errors, polyglot) {
+	let fields = [];
+	errors.forEach(error => {
+		if (error.type === ERROR_TYPES.NOT_NULL) {
+			fields.push({
+				key: error.path,
+				message: generateMessage(polyglot, POLYGLOT.FIELD_REQUIRED, error.path),
+			})
+		}
 
-const messages = {
-	ObjectID: path => `${path} is not a valid ID.`,
-	required: path => `${path} is a required field.`,
-};
-
-
-function handleInvalidParameterError(errors) {
-	const errorKeys = Object.keys(errors);
-	const fields = errorKeys.reduce((acc, key) => {
-		const error = errors[key];
-		acc[key] = messages[error.kind](error.path);
-		return acc;
-	}, {});
-	return { error: new InvalidParameters(fields) };
+		if (error.type === ERROR_TYPES.VALIDATION) {
+			fields.push({
+				key: error.path,
+				message: generateMessage(polyglot, POLYGLOT.FIELD_INVALID, error.path),
+			})
+		}
+	});
+	return new InvalidParameters(fields);
 }
 
-function getError(error) {
-	if (error.name === 'ValidationError') {
-		return handleInvalidParameterError(error.errors);
+function getError(error, polyglot) {
+	if (error.name.includes('ValidationError')) {
+		return handleInvalidParameterError(error.errors, polyglot);
 	}
+	return new ServerError();
 }
 
 
-module.exports = (app) => {
-	app.use((err, req, res, next) => {
-		const error = getError(err);
-		res.status(400).send(error);
+module.exports = (app, polyglot) => {
+	app.use((err, req, res) => {
+		const errors = getError(err, polyglot);
+		return res.status(400).send({ errors });
 	});
 };
