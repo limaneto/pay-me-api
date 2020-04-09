@@ -3,8 +3,11 @@ const BaseError = require('./BaseError');
 // TODO usar polyglot
 class ServerError extends BaseError {
 	constructor() {
-		super(500, 'Servidor está momentaneamente indisponível');
+		super('Servidor está momentaneamente indisponível');
 		this.code = 'server-error';
+	}
+	getStatusCode() {
+		return 500;
 	}
 }
 

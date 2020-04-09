@@ -31,8 +31,8 @@ function getError(error, polyglot) {
 
 
 module.exports = (app, polyglot) => {
-	app.use((err, req, res) => {
+	app.use((err, req, res, next) => {
 		const errors = getError(err, polyglot);
-		return res.status(400).send({ errors });
+		return res.status(errors.getStatusCode()).send({ errors });
 	});
 };
