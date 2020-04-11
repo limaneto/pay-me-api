@@ -6,14 +6,17 @@
   "logged": "%{field} logado com sucesso",
   "wrong-password": "Senha incorreta",
   "model-not-found": "%{field} não foi encontrado",
-  "field-invalid": "%{field} inválido",
   "field-required": "%{field} é um campo obrigatório",
+  "already-friends": "Usuário já faz parte dos amigos",
+  "unique": "%{field} já está sendo utilizado",
   "not-found": "%{field} não encontrado",
+  "field-invalid": "%{field} inválido",
   "password": "Senha",
   "firstName": "Primeiro nome",
   "lastName": "Primeiro nome",
   "pay": "Pagamento",
   "debt": "Dívida",
   "user": "Usuário",
-  "email": "Email"
+  "email": "Email",
+  "friend": "Amigo"
 }
