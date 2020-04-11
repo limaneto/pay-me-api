@@ -35,7 +35,7 @@ const save = (req, res, next, polyglot) => {
 		if (err) {
 			return next(err);
 		}
-		res.status(201).json({ data: { pay: savedPay.toJSON(), message: polyglot.t('registered', { model: polyglot.t('debt') }) } });
+		res.status(201).json({ data: { pay: savedPay.toJSON(), message: polyglot.t('registered', { field: polyglot.t('debt') }) } });
 	});
 };
 
