@@ -22,9 +22,25 @@ function handleInvalidParameterError(errors, polyglot) {
 	return new InvalidParameters(fields);
 }
 
+function handleUniqueConstraintError(errors, polyglot) {
+	let fields = [];
+	errors.forEach(error => {
+		if (error.type === ERROR_TYPES.UNIQUE_CONSTRAINT) {
+			fields.push({
+				key: error.path,
+				message: generateMessage(polyglot, POLYGLOT.UNIQUE, error.path),
+			})
+		}
+	});
+	return new InvalidParameters(fields);
+}
+
 function getError(error, polyglot) {
 	if (error.name.includes('ValidationError')) {
 		return handleInvalidParameterError(error.errors, polyglot);
+	}
+	if (error.name.includes('UniqueConstraintError')) {
+		return handleUniqueConstraintError(error.errors, polyglot);
 	}
 	return new ServerError();
 }
