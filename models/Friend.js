@@ -1,10 +1,9 @@
 module.exports = (sequelize, DataTypes) => {
 	return sequelize.define('Friend', {
 		id: {
-			type: DataTypes.INTEGER,
+			type: DataTypes.UUID,
+			defaultValue: DataTypes.UUIDV4,
 			primaryKey: true,
-			allowNull: false,
-			autoIncrement: true
 		},
 		userId: {
 			type: DataTypes.INTEGER,

@@ -1,9 +1,23 @@
 module.exports = (sequelize, DataTypes) => {
 	const Payment = sequelize.define('Payment', {
-		value: { type: DataTypes.FLOAT, allowNull: false },
-		datePaid: { type: DataTypes.DATEONLY },
-		paymentReceived: { type: DataTypes.BOOLEAN },
-		description: { type: DataTypes.STRING },
+		id: {
+			type: DataTypes.UUID,
+			defaultValue: DataTypes.UUIDV4,
+			primaryKey: true,
+		},
+		value: {
+			type: DataTypes.FLOAT,
+			allowNull: false,
+		},
+		datePaid: {
+			type: DataTypes.DATEONLY,
+		},
+		paymentReceived: {
+			type: DataTypes.BOOLEAN,
+		},
+		description: {
+			type: DataTypes.STRING,
+		},
 	}, { paranoid: true });
 
 	/* Class methods */
