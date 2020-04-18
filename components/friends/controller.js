@@ -32,6 +32,7 @@ const getFriends = async (req, res, next) => {
 	limit = parseInt(limit);
 	try {
 		const friends = await user.getFriends({
+			order: [['firstName', 'ASC']],
 			limit: limit + 1,
 			offset: limit * (page - 1),
 			attributes: ['id', 'fullName', 'firstName', 'lastName', 'email'],
