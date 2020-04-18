@@ -25,34 +25,68 @@ const addFriend = async (req, res, next, polyglot) => {
 	}
 };
 
+const getFriendsBaseParams = (page, limit) => {
+	page = parseInt(page);
+	limit = parseInt(limit);
+	return {
+		order: [['firstName', 'ASC']],
+		limit: limit + 1,
+		offset: limit * (page - 1),
+		attributes: ['id', 'fullName', 'firstName', 'lastName', 'email'],
+		joinTableAttributes: []
+	};
+};
+
+const handleData = (results, path, { page, limit, search }) => {
+	page = parseInt(page);
+	limit = parseInt(limit);
+	let url = `${BASE_URL}${path}?page=${page + 1}`;
+	url = search ? `${url}&search=${search}` : url;
+	const data = {
+		count: results.length > limit ? results.length - 1 : results.length,
+		results: [...results],
+	};
+	if (results.length > limit) {
+		data.results.pop();
+		data.next = results[results.length - 1] ? url : null;
+	} else {
+		data.next = null;
+	}
+	return data;
+};
+
+const getFriendsByEmail = async (req, res, next) => {
+	const { Op } = models.Sequelize;
+	const { user } = req;
+	let { page = 1, limit = PAGINATION.LIMIT, search } = req.query;
+
+	try {
+		const friends = await user.getFriends({
+			where: {
+				email: {
+					[Op.substring]: search,
+				}
+			},
+			...getFriendsBaseParams(page, limit),
+		});
+		const data = handleData(friends, req.route.path, { page, limit, search });
+		return res.status(200).send(data);
+	} catch (err) {
+		return next(err);
+	}
+};
+
 const getFriends = async (req, res, next) => {
 	const { user } = req;
 	let { page = 1, limit = PAGINATION.LIMIT } = req.query;
-	page = parseInt(page);
-	limit = parseInt(limit);
-	try {
-		const friends = await user.getFriends({
-			order: [['firstName', 'ASC']],
-			limit: limit + 1,
-			offset: limit * (page - 1),
-			attributes: ['id', 'fullName', 'firstName', 'lastName', 'email'],
-			joinTableAttributes: []
-		});
 
-		const data = {
-			count: friends.length > limit ? friends.length - 1 : friends.length,
-			results: [...friends],
-		};
-		if (friends.length > limit) {
-			data.results.pop();
-			data.next = friends[friends.length - 1] ? `${BASE_URL}/api/friends/all?page=${parseInt(page) + 1}` : null;
-		} else {
-			data.next = null;
-		}
+	try {
+		const friends = await user.getFriends({ ...getFriendsBaseParams(page, limit) });
+		const data = handleData(friends, req.route.path, { page, limit });
 		res.status(200).send(data);
 	} catch(err) {
 		return next(err);
 	}
 };
 
-module.exports = { addFriend, getFriends };
+module.exports = { addFriend, getFriends, getFriendsByEmail };
