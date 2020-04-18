@@ -25,7 +25,7 @@ const addFriend = async (req, res, next, polyglot) => {
 	}
 };
 
-const getAllFriends = async (req, res, next) => {
+const getFriends = async (req, res, next) => {
 	const { user } = req;
 	let { page = 1, limit = PAGINATION.LIMIT } = req.query;
 	page = parseInt(page);
@@ -54,4 +54,4 @@ const getAllFriends = async (req, res, next) => {
 	}
 };
 
-module.exports = { addFriend, getAllFriends };
+module.exports = { addFriend, getFriends };
