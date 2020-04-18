@@ -64,7 +64,7 @@ const getFriendsByEmail = async (req, res, next) => {
 		const friends = await user.getFriends({
 			where: {
 				email: {
-					[Op.substring]: search,
+					[Op.like]: `${search}%`,
 				}
 			},
 			...getFriendsBaseParams(page, limit),
