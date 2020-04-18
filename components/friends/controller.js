@@ -1,5 +1,5 @@
 const models = require('../../models');
-const { POLYGLOT, DATABASE_FIELDS } = require('../../utils/constants');
+const { PAGINATION, BASE_URL, POLYGLOT, DATABASE_FIELDS } = require('../../utils/constants');
 const { generateMessage } = require('../../utils/helpers');
 
 const addFriend = async (req, res, next, polyglot) => {
@@ -25,4 +25,33 @@ const addFriend = async (req, res, next, polyglot) => {
 	}
 };
 
-module.exports = { addFriend };
+const getAllFriends = async (req, res, next) => {
+	const { user } = req;
+	let { page = 1, limit = PAGINATION.LIMIT } = req.query;
+	page = parseInt(page);
+	limit = parseInt(limit);
+	try {
+		const friends = await user.getFriends({
+			limit: limit + 1,
+			offset: limit * (page - 1),
+			attributes: ['id', 'fullName', 'firstName', 'lastName', 'email'],
+			joinTableAttributes: []
+		});
+
+		const data = {
+			count: friends.length > limit ? friends.length - 1 : friends.length,
+			results: [...friends],
+		};
+		if (friends.length > limit) {
+			data.results.pop();
+			data.next = friends[friends.length - 1] ? `${BASE_URL}/api/friends/all?page=${parseInt(page) + 1}` : null;
+		} else {
+			data.next = null;
+		}
+		res.status(200).send(data);
+	} catch(err) {
+		return next(err);
+	}
+};
+
+module.exports = { addFriend, getAllFriends };
