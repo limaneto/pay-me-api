@@ -27,6 +27,12 @@ module.exports = (sequelize, DataTypes) => {
 				name: 'creditor',
 			},
 		});
+
+		Loan.belongsTo(models.User, {
+			foreignKey: {
+				name: 'creator',
+			},
+		});
 	};
 
 	return Loan;
