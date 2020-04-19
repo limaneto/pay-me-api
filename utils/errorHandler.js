@@ -1,11 +1,13 @@
-const { InvalidParameters, ServerError } = require('../errors');
+const { RequiredParameters, InvalidParameters, ServerError } = require('../errors');
 const { ERROR_TYPES, POLYGLOT } = require('../utils/constants');
 const { generateMessage } = require('../utils/helpers');
 
 function handleInvalidParameterError(errors, polyglot) {
 	let fields = [];
+	let isNull = false;
 	errors.forEach(error => {
 		if (error.type === ERROR_TYPES.NOT_NULL) {
+			isNull = true;
 			fields.push({
 				key: error.path,
 				message: generateMessage(polyglot, POLYGLOT.FIELD_REQUIRED, error.path),
@@ -19,7 +21,7 @@ function handleInvalidParameterError(errors, polyglot) {
 			})
 		}
 	});
-	return new InvalidParameters(fields);
+	return isNull ? new RequiredParameters(fields) : new InvalidParameters(fields);
 }
 
 function handleUniqueConstraintError(errors, polyglot) {

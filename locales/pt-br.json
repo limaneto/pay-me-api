@@ -18,5 +18,9 @@
   "debt": "Dívida",
   "user": "Usuário",
   "email": "Email",
-  "friend": "Amigo"
+  "friend": "Amigo",
+  "debtor_id": "Devedor",
+  "creditor_id": "Credor",
+  "value": "Valor",
+  "title": "Título"
 }
