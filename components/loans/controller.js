@@ -1,4 +1,6 @@
 const models = require('../../models');
+const { generateMessage } = require('../../utils/helpers');
+const { POLYGLOT: { REGISTERED, DEBT } } = require('../../utils/constants');
 
 const acceptLoan = (req) => {
 	const { body: { debtor_id }, user } = req;
@@ -11,7 +13,7 @@ const addUsersIdsToLoan = (req) => {
 	return { creditor: creditor_id, debtor: debtor_id };
 };
 
-const save = async (req, res, next) => {
+const save = async (req, res, next, polyglot) => {
 	const { user, body: { debtor_id, creditor_id } } = req;
 	const friendId = user.id !== debtor_id ? debtor_id : creditor_id;
 	try {
@@ -26,7 +28,10 @@ const save = async (req, res, next) => {
 				friendId,
 			},
 		});
-		return res.send(loan);
+		return res.send({
+			message: generateMessage(polyglot, REGISTERED, DEBT),
+			loan,
+		});
 	} catch (err) {
 		return next(err);
 	}

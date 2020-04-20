@@ -13,6 +13,7 @@ module.exports = {
 		UNIQUE: 'unique',
 		ALREADY_FRIENDS: 'already-friends',
 		NOT_FOUND: 'not-found',
+		DEBT: 'debt',
 	},
 	DATABASE_FIELDS: {
 		FIRST_NAME: 'firstName',

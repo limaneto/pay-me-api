@@ -1,5 +1,5 @@
 const { save } = require('./controller');
-const requiredParamsValidator = require('./validate');
+const { requiredParamsValidator } = require('./validate');
 const auth = require('../../config/auth');
 
 module.exports = (app, polyglot) => {
