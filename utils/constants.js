@@ -22,6 +22,8 @@ module.exports = {
 		USER: 'user',
 		FRIEND: 'friend',
 		FRIEND_ID: 'friendId',
+		DEBTOR: 'debtor',
+		CREDITOR: 'creditor',
 	},
 	PAGINATION: {
 		LIMIT: 2,

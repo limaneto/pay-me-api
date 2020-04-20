@@ -1,6 +1,6 @@
 const models = require('../../models');
-const { generateMessage } = require('../../utils/helpers');
-const { POLYGLOT: { REGISTERED, DEBT } } = require('../../utils/constants');
+const { generateMessage, handleData } = require('../../utils/helpers');
+const { PAGINATION, DATABASE_FIELDS, POLYGLOT: { REGISTERED, DEBT } } = require('../../utils/constants');
 
 const acceptLoan = (req) => {
 	const { body: { debtor_id }, user } = req;
@@ -37,6 +37,47 @@ const save = async (req, res, next, polyglot) => {
 	}
 };
 
+const getWhereClause = (field, user) => {
+	if (field === DATABASE_FIELDS.DEBTOR) {
+		return {
+			isActive: true,
+			debtor: user.id,
+		}
+	}
+	return {
+		isActive: true,
+		creditor: user.id,
+	}
+};
+
+const getLoans = async (req, res, next, field) => {
+	const { user } = req;
+	let { page = 1, limit = PAGINATION.LIMIT } = req.query;
+	page = parseInt(page);
+	limit = parseInt(limit);
+	try {
+		const loans = await models.Loan.findAll({
+			limit: limit + 1,
+			offset: limit * (page - 1),
+			where: getWhereClause(field, user),
+		});
+		const data = handleData(loans, req.route.path, { page, limit });
+		res.send(data);
+	} catch (err) {
+		return next(err);
+	}
+};
+
+const getMyDebts = async (req, res, next) => {
+	return getLoans(req, res, next, DATABASE_FIELDS.DEBTOR);
+};
+
+const getMyCredits = async (req, res, next) => {
+	return getLoans(req, res, next, DATABASE_FIELDS.CREDITOR);
+};
+
 module.exports = {
 	save,
+	getMyDebts,
+	getMyCredits,
 };
