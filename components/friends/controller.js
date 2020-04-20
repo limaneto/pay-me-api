@@ -1,6 +1,6 @@
 const models = require('../../models');
-const { PAGINATION, BASE_URL, POLYGLOT, DATABASE_FIELDS } = require('../../utils/constants');
-const { generateMessage } = require('../../utils/helpers');
+const { PAGINATION, POLYGLOT, DATABASE_FIELDS } = require('../../utils/constants');
+const { generateMessage, handleData } = require('../../utils/helpers');
 
 const addFriend = async (req, res, next, polyglot) => {
 	const { user, body: { friendId } } = req;
@@ -35,24 +35,6 @@ const getFriendsBaseParams = (page, limit) => {
 		attributes: ['id', 'fullName', 'firstName', 'lastName', 'email'],
 		joinTableAttributes: []
 	};
-};
-
-const handleData = (results, path, { page, limit, search }) => {
-	page = parseInt(page);
-	limit = parseInt(limit);
-	let url = `${BASE_URL}${path}?page=${page + 1}`;
-	url = search ? `${url}&search=${search}` : url;
-	const data = {
-		count: results.length > limit ? results.length - 1 : results.length,
-		results: [...results],
-	};
-	if (results.length > limit) {
-		data.results.pop();
-		data.next = results[results.length - 1] ? url : null;
-	} else {
-		data.next = null;
-	}
-	return data;
 };
 
 const getFriendsByEmail = async (req, res, next) => {
