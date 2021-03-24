@@ -11,12 +11,12 @@ const addUsersIdsToLoan = (req) => {
 	return { creditor: creditor_id, debtor: debtor_id };
 };
 
-const buildPay = (req, user, isMyDebt) => {
-	let pay = { ...req.body };
+const buildLoan = (req, user, isMyDebt) => {
+	let loan = { ...req.body };
 	if (isMyDebt) {
-		pay = { ...pay, ...acceptLoan(req) };
+		loan = { ...loan, ...acceptLoan(req) };
 	}
-	return { ...pay, creator: user.id, ...addUsersIdsToLoan(req) };
+	return { ...loan, creator: user.id, ...addUsersIdsToLoan(req) };
 }
 
 const save = async (req, res, next, polyglot) => {
@@ -24,8 +24,8 @@ const save = async (req, res, next, polyglot) => {
 	const isMyDebt = user.id === debtor_id;
 	const friendId = isMyDebt ? creditor_id : debtor_id;
 	try {
-		const pay = buildPay(req, user, isMyDebt);
-		const loan = await models.Loan.create(pay);
+		const loan = buildLoan(req, user, isMyDebt);
+		const savedLoan = await models.Loan.create(loan);
 		await models.Friend.findOrCreate({
 			where: {
 				userId: user.id,
@@ -34,7 +34,7 @@ const save = async (req, res, next, polyglot) => {
 		});
 		return res.send({
 			message: generateMessage(polyglot, REGISTERED, DEBT),
-			loan,
+			savedLoan,
 		});
 	} catch (err) {
 		return next(err);
