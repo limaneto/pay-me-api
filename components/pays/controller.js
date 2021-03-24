@@ -1,4 +1,4 @@
-const { Pay } = require('../../models');
+const { Payment } = require('../../models');
 
 function acceptDebtOrCredit(body) {
 	if (body.debtor) {
@@ -27,7 +27,7 @@ function addCreator(req) {
 }
 
 const save = (req, res, next, polyglot) => {
-	let pay = new Pay(req.body);
+	let pay = new Payment(req.body);
 	pay = Object.assign(pay, acceptDebtOrCredit(req.body));
 	pay = Object.assign(pay, addDebtorOrCreditorId(req));
 	pay = Object.assign(pay, addCreator(req));
@@ -43,7 +43,7 @@ const getAllByUser = (req, res, next, polyglot) => {
 	const limit = +req.query.limit || 10;
 	const page = (+req.query.page > 0 ? +req.query.page : 1) - 1;
 	const { user } = req;
-	Pay
+	Payment
 		.find()
 		.or([{ creditor: user._id }, { debtor: user._id }])
 		.sort({ createdAt: -1 })
@@ -60,23 +60,26 @@ const getAllByUser = (req, res, next, polyglot) => {
 		});
 };
 
-const getAllPays = (req, res, next, polyglot) => {
+const getAllPays = async (req, res, next, polyglot) => {
 	const limit = +req.query.limit || 10;
 	const page = (+req.query.page > 0 ? +req.query.page : 1) - 1;
-	Pay
-		.find()
-		.sort({ createdAt: -1 })
-		.limit(limit)
-		.skip(limit * page)
-		.lean()
-		.exec((err, pays) => {
-			if (err) {
-				return res.status(500).json({ message: polyglot.t('500') });
-			}
 
-			const metadata = { page: page + 1 };
-			return res.json({ pays, metadata });
+	try {
+		const pays = await Payment.findAll({
+			order: [
+				['createdAt', 'DESC'],
+			],
+			limit,
+			offset: (limit * page)
 		});
+
+		const metadata = { page: page + 1 };
+		return res.json({ pays, metadata });
+	} catch (err) {
+		if (err) {
+			return res.status(500).json({ message: polyglot.t('500') });
+		}
+	}
 };
 
 const getAllCreditsByUser = (req, res, next, polyglot) => {
@@ -104,7 +107,7 @@ const getAllDebtsByUser = (req, res, next, polyglot) => {
 	const limit = +req.query.limit || 10;
 	const page = (+req.query.page > 0 ? +req.query.page : 1) - 1;
 	const { user } = req;
-	Pay
+	Payment
 		.find()
 		.where({ debtor: user._id })
 		.sort({ createdAt: -1 })

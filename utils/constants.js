@@ -26,6 +26,6 @@ module.exports = {
 		CREDITOR: 'creditor',
 	},
 	PAGINATION: {
-		LIMIT: 2,
+		LIMIT: 10,
 	}
 };

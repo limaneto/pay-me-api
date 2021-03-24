@@ -2,10 +2,8 @@ const models = require('../../models');
 const { generateMessage, handleData } = require('../../utils/helpers');
 const { PAGINATION, DATABASE_FIELDS, POLYGLOT: { REGISTERED, DEBT } } = require('../../utils/constants');
 
-const acceptLoan = (req) => {
-	const { body: { debtor_id }, user } = req;
-	if (user.id === debtor_id) return { creditAccepted: true, debtAccepted: true };
-	return null;
+const acceptLoan = () => {
+	return { creditAccepted: true, debtAccepted: true };
 };
 
 const addUsersIdsToLoan = (req) => {
@@ -13,14 +11,20 @@ const addUsersIdsToLoan = (req) => {
 	return { creditor: creditor_id, debtor: debtor_id };
 };
 
+const buildPay = (req, user, isMyDebt) => {
+	let pay = { ...req.body };
+	if (isMyDebt) {
+		pay = { ...pay, ...acceptLoan(req) };
+	}
+	return { ...pay, creator: user.id, ...addUsersIdsToLoan(req) };
+}
+
 const save = async (req, res, next, polyglot) => {
 	const { user, body: { debtor_id, creditor_id } } = req;
-	const friendId = user.id !== debtor_id ? debtor_id : creditor_id;
+	const isMyDebt = user.id === debtor_id;
+	const friendId = isMyDebt ? creditor_id : debtor_id;
 	try {
-		let pay = { ...req.body };
-		pay = Object.assign(pay, acceptLoan(req));
-		pay = Object.assign(pay, addUsersIdsToLoan(req));
-		pay = Object.assign(pay, { creator: user.id });
+		const pay = buildPay(req, user, isMyDebt);
 		const loan = await models.Loan.create(pay);
 		await models.Friend.findOrCreate({
 			where: {
@@ -44,9 +48,14 @@ const getWhereClause = (field, user) => {
 			debtor: user.id,
 		}
 	}
+	if (field === DATABASE_FIELDS.CREDITOR) {
+		return {
+			isActive: true,
+			creditor: user.id,
+		}
+	}
 	return {
 		isActive: true,
-		creditor: user.id,
 	}
 };
 
@@ -57,8 +66,11 @@ const getLoans = async (req, res, next, field) => {
 	limit = parseInt(limit);
 	try {
 		const loans = await models.Loan.findAll({
+			order: [
+				['createdAt', 'DESC'],
+			],
 			limit: limit + 1,
-			offset: limit * (page - 1),
+			offset:  limit * (page - 1),
 			where: getWhereClause(field, user),
 		});
 		const data = handleData(loans, req.route.path, { page, limit });
@@ -78,6 +90,7 @@ const getMyCredits = async (req, res, next) => {
 
 module.exports = {
 	save,
+	getLoans,
 	getMyDebts,
 	getMyCredits,
 };
