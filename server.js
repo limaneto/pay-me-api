@@ -1,6 +1,6 @@
 const fileSystem = require('fs');
 const express = require('express');
-const { ApolloServer, gql } = require('apollo-server-express');
+const { ApolloServer } = require('apollo-server-express');
 import typeDefs from './schemas';
 import userController from './components/users/controller';
 const Polyglot = require('node-polyglot');
