@@ -16,23 +16,11 @@ module.exports = (sequelize, DataTypes) => {
 	/* Class methods */
 
 	Loan.associate = function (models) {
-		Loan.belongsTo(models.User, {
-			foreignKey: {
-				name: 'debtor',
-			},
-		});
+		Loan.belongsTo(models.User, { as: 'debtor' });
 
-		Loan.belongsTo(models.User, {
-			foreignKey: {
-				name: 'creditor',
-			},
-		});
+		Loan.belongsTo(models.User, { as: 'creditor' });
 
-		Loan.belongsTo(models.User, {
-			foreignKey: {
-				name: 'creator',
-			},
-		});
+		Loan.belongsTo(models.User, { as: 'creator' });
 	};
 
 	return Loan;
