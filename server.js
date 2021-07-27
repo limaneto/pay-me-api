@@ -19,6 +19,9 @@ const server = new ApolloServer({
 			Mutation: {
 				register: async (_, { user }, { polyglot }) => {
 					return await userController.register({ user, polyglot })
+				},
+				login: async (_, { email, password }, { polyglot }) => {
+					return await userController.login({ email, password, polyglot })
 				}
 			}
 		},

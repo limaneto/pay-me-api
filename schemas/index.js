@@ -51,12 +51,18 @@ export default gql`
       hello: String
   }
   type Mutation {
-      register(user: UserInput): RegisterResponse
+      register(user: UserInput): RegisterResponse!
+			login(email: String! password: String!): LoginResponse!
   }
   type RegisterResponse {
       message: String!
 			user: UserResponse!
   }
+	
+	type LoginResponse {
+			message: String!
+			token: String!
+	}
 	
 	type UserResponse {
 			id: ID!
