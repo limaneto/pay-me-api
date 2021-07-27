@@ -36,6 +36,7 @@ const register = async ({ user, polyglot }) => {
 		const newUser = await models.User.create(user);
 		return { message: polyglot.t('registered', { field: polyglot.t('user') }), user: newUser.toAuthJSON() };
 	} catch (err) {
+		//TODO error handler
 		console.log('err', err)
 	}
 };
