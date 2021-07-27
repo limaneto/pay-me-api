@@ -31,13 +31,13 @@ const login = (req, res, next, polyglot) => {
 };
 
 
-const save = async (req, res, next, polyglot) => {
+const register = async ({ user, polyglot }) => {
 	try {
-		const user = await models.User.create(req.body);
-		return res.send({ message: polyglot.t('registered', { field: polyglot.t('user') }), user: user.toAuthJSON() });
+		const newUser = await models.User.create(user);
+		return { message: polyglot.t('registered', { field: polyglot.t('user') }), user: newUser.toAuthJSON() };
 	} catch (err) {
-		return next(err);
+		console.log('err', err)
 	}
 };
 
-module.exports = { save, login };
+module.exports = { register, login };
