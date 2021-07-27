@@ -2,13 +2,16 @@ const models = require('../../models');
 const { generateMessage, handleData } = require('../../utils/helpers');
 const { PAGINATION, DATABASE_FIELDS, POLYGLOT: { REGISTERED, DEBT } } = require('../../utils/constants');
 
+// TODO criar endpoint pra aceitar Loan
+// TODO criar endpoint pra recusar Loan
+
 const acceptLoan = () => {
 	return { creditAccepted: true, debtAccepted: true };
 };
 
 const addUsersIdsToLoan = (req) => {
 	const { debtor_id, creditor_id } = req.body;
-	return { creditor: creditor_id, debtor: debtor_id };
+	return { creditorId: creditor_id, debtorId: debtor_id };
 };
 
 const buildLoan = (req, user, isMyDebt) => {
@@ -16,7 +19,7 @@ const buildLoan = (req, user, isMyDebt) => {
 	if (isMyDebt) {
 		loan = { ...loan, ...acceptLoan(req) };
 	}
-	return { ...loan, creator: user.id, ...addUsersIdsToLoan(req) };
+	return { ...loan, creatorId: user.id, ...addUsersIdsToLoan(req) };
 }
 
 const save = async (req, res, next, polyglot) => {
@@ -45,13 +48,13 @@ const getWhereClause = (field, user) => {
 	if (field === DATABASE_FIELDS.DEBTOR) {
 		return {
 			isActive: true,
-			debtor: user.id,
+			debtorId: user.id,
 		}
 	}
 	if (field === DATABASE_FIELDS.CREDITOR) {
 		return {
 			isActive: true,
-			creditor: user.id,
+			creditorId: user.id,
 		}
 	}
 	return {
@@ -64,15 +67,18 @@ const getLoans = async (req, res, next, field) => {
 	let { page = 1, limit = PAGINATION.LIMIT } = req.query;
 	page = parseInt(page);
 	limit = parseInt(limit);
+	const options = {
+		order: [
+			['createdAt', 'DESC'],
+		],
+		limit: limit + 1,
+		offset:  limit * (page - 1),
+		where: getWhereClause(field, user),
+		include: ['debtor', 'creditor']
+	}
+
 	try {
-		const loans = await models.Loan.findAll({
-			order: [
-				['createdAt', 'DESC'],
-			],
-			limit: limit + 1,
-			offset:  limit * (page - 1),
-			where: getWhereClause(field, user),
-		});
+		const loans = await models.Loan.findAll(options);
 		const data = handleData(loans, req.route.path, { page, limit });
 		res.send(data);
 	} catch (err) {
