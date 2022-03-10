@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
 			type: DataTypes.VIRTUAL,
 			get() {
 				return `${this.firstName} ${this.lastName}`
-			}
+			},
 		},
 		firstName: {
 			type: DataTypes.STRING,

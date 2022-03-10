@@ -50,10 +50,17 @@ export default gql`
   type Query {
       hello: String
   }
+
   type Mutation {
+			addFriend(friendId: String!): BaseResponse!
       register(user: UserInput): RegisterResponse!
 			login(email: String! password: String!): LoginResponse!
   }
+	
+	type BaseResponse {
+			message: String!
+	}
+	
   type RegisterResponse {
       message: String!
 			user: UserResponse!

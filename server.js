@@ -1,10 +1,13 @@
+import passport from 'passport';
+import cors from 'cors';
+import typeDefs from './schemas';
+import userController from './components/users/controller';
+import friendController from './components/friends/controller';
+
 const fileSystem = require('fs');
 const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 const auth = require('./config/auth');
-import typeDefs from './schemas';
-import userController from './components/users/controller';
-import friendController from './components/friends/controller';
 const Polyglot = require('node-polyglot');
 
 const app = express();
@@ -17,37 +20,29 @@ app.use(cors());
 
 app.post('/graphql', passport.authenticate('jwt', { session: false }), (req, res, next) => {
 	next();
-})
+});
 
 const server = new ApolloServer({
-		typeDefs,
-		resolvers: {
-			Query: {
-				hello: () => {
-					return 'Hello';
-				}
-			},
-			Mutation: {
-				register: async (_, { user }, { polyglot }) => {
-					return await userController.register({ polyglot, user })
-				},
-				login: async (_, { email, password }, { polyglot }) => {
-					return await userController.login({ email, password, polyglot })
-				}
-			}
+	typeDefs,
+	resolvers: {
+		Query: {
+			hello: () => 'Hello',
 		},
-		context: ({ req, res }) => {
-			return { user: req.user, polyglot };
+		Mutation: {
+			addFriend: async (_, { friendId }, { user }) => friendController.addFriend({ friendId, polyglot, user }), // eslint-disable-line max-len
+			register: async (_, { user }) => userController.register({ polyglot, user }), // eslint-disable-line max-len
+			login: async (_, { email, password }) => userController.login({ email, password, polyglot }), // eslint-disable-line max-len
 		},
-	}
-);
+	},
+	context: ({ req }) => ({ user: req.user }),
+});
 
 server.start().then(() => {
 	server.applyMiddleware({ app });
 
 	app.listen({ port: 4000 }, () => {
 		console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`);
-	})
+	});
 });
 
 
@@ -62,8 +57,6 @@ server.start().then(() => {
 // const models = require('./models');
 // const routes = require('./routes');
 // const handleError = require('./utils/errorHandler');
-// const auth = require('./config/auth');
-
 
 
 // require('dotenv').config();

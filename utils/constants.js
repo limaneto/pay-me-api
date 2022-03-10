@@ -27,5 +27,5 @@ module.exports = {
 	},
 	PAGINATION: {
 		LIMIT: 10,
-	}
+	},
 };
