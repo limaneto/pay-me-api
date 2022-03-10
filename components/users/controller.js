@@ -30,7 +30,6 @@ const login = async ({ email, password, polyglot }) => {
 	}
 };
 
-
 const register = async ({ user, polyglot }) => {
 	try {
 		const newUser = await models.User.create(user);
