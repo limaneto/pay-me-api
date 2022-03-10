@@ -21,5 +21,4 @@ passport.use(JWTStrategy);
 
 module.exports = {
 	initialize: () => passport.initialize(),
-	authenticate: () => passport.authenticate('jwt', { session: false }),
 };
