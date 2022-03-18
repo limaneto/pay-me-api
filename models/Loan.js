@@ -2,15 +2,15 @@ module.exports = (sequelize, DataTypes) => {
 	const Loan = sequelize.define('Loan', {
 		isActive: { type: DataTypes.BOOLEAN, defaultValue: true },
 		title: { type: DataTypes.STRING(20), allowNull: false },
-		description: { type: DataTypes.STRING },
+		description: DataTypes.STRING,
 		value: { type: DataTypes.FLOAT, allowNull: false },
-		debtAccepted: { type: DataTypes.BOOLEAN },
-		debtRefused: { type: DataTypes.BOOLEAN },
-		creditAccepted: { type: DataTypes.BOOLEAN },
-		creditRefused: { type: DataTypes.BOOLEAN },
-		isPaid: { type: DataTypes.BOOLEAN },
-		dateDue: { type: DataTypes.DATEONLY },
-		dateLoanCompleted: { type: DataTypes.DATEONLY },
+		debtAccepted: DataTypes.BOOLEAN,
+		debtRefused: DataTypes.BOOLEAN,
+		creditAccepted: DataTypes.BOOLEAN,
+		creditRefused: DataTypes.BOOLEAN,
+		isPaid: DataTypes.BOOLEAN,
+		dateDue: DataTypes.DATEONLY,
+		dateLoanCompleted: DataTypes.DATEONLY,
 	}, { paranoid: true });
 
 	/* Class methods */

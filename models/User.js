@@ -12,16 +12,14 @@ module.exports = (sequelize, DataTypes) => {
 		fullName: {
 			type: DataTypes.VIRTUAL,
 			get() {
-				return `${this.firstName} ${this.lastName}`
+				return `${this.firstName} ${this.lastName}`;
 			},
 		},
 		firstName: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		lastName: {
-			type: DataTypes.STRING
-		},
+		lastName: DataTypes.STRING,
 		email: {
 			type: DataTypes.STRING,
 			unique: true,
@@ -31,12 +29,13 @@ module.exports = (sequelize, DataTypes) => {
 		password: {
 			type: DataTypes.STRING,
 			allowNull: false,
-		}
+		},
 	});
 
 	/* Class Methods */
 
 	User.beforeCreate((user) => {
+		// eslint-disable-next-line no-param-reassign
 		user.password = bcrypt.hashSync(user.password, 10);
 	});
 
@@ -49,14 +48,14 @@ module.exports = (sequelize, DataTypes) => {
 
 	/* Instance Methods */
 
-	User.prototype.generateJWT = function() {
+	User.prototype.generateJWT = function () {
 		return jwt.sign({
 			email: this.email,
 			id: this.id,
 		}, process.env.AUTH_SECRET, { expiresIn: '1h' });
 	};
 
-	User.prototype.toAuthJSON = function() {
+	User.prototype.toAuthJSON = function () {
 		return {
 			id: this.id,
 			email: this.email,
@@ -64,8 +63,8 @@ module.exports = (sequelize, DataTypes) => {
 		};
 	};
 
-	User.prototype.isPasswordValid = async function(password) {
-		return await bcrypt.compare(password, this.password);
+	User.prototype.isPasswordValid = async function (password) {
+		return bcrypt.compare(password, this.password);
 	};
 
 	return User;
