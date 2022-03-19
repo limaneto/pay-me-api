@@ -17,10 +17,9 @@ module.exports = (sequelize, DataTypes) => {
 
 	Loan.associate = function (models) {
 		Loan.belongsTo(models.User, { as: 'debtor' });
-
 		Loan.belongsTo(models.User, { as: 'creditor' });
-
 		Loan.belongsTo(models.User, { as: 'creator' });
+		Loan.hasMany(models.Payment);
 	};
 
 	return Loan;
