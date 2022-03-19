@@ -7,14 +7,11 @@ import friendController from './components/friends/controller';
 const fileSystem = require('fs');
 const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
-const auth = require('./config/auth');
 const Polyglot = require('node-polyglot');
 
 const app = express();
 const data = fileSystem.readFileSync('./locales/pt-br.json', 'utf8');
 const polyglot = new Polyglot({ phrases: JSON.parse(data) });
-
-auth.initialize();
 
 app.use(cors());
 
