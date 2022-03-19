@@ -11,7 +11,6 @@ import userController from './components/users/controller';
 import friendController from './components/friends/controller';
 import permissions from './schemas/permissions';
 
-
 const app = express();
 const data = fileSystem.readFileSync('./locales/pt-br.json', 'utf8');
 const polyglot = new Polyglot({ phrases: JSON.parse(data) });
@@ -49,45 +48,3 @@ server.start().then(() => {
 		console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`);
 	});
 });
-
-
-/**
- * Old Express implementation, before connecting GrapqhQL
- *
- */
-// const fileSystem = require('fs');
-// const bodyParser = require('body-parser');
-// const helmet = require('helmet');
-// const Polyglot = require('node-polyglot');
-// const models = require('./models');
-// const routes = require('./routes');
-// const handleError = require('./utils/errorHandler');
-
-
-// require('dotenv').config();
-// require('colors');
-//
-// const app = express();
-//
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(helmet());
-// app.use(auth.initialize());
-// app.set('port', process.env.PORT);
-//
-// const data = fileSystem.readFileSync('./locales/pt-br.json', 'utf8');
-// const polyglot = new Polyglot({ phrases: JSON.parse(data) });
-//
-// app.get('/', (req, res) => {
-// 	res.send('I hit / path\n');
-// });
-//
-// models.sequelize.sync()
-// 	.then(() => {
-// 		app.listen(app.get('port'), () => {
-// 			console.log(`I am alive on port ${app.get('port')}.\n`.green);
-// 		});
-// 	});
-//
-// routes(app, polyglot);
-// handleError(app, polyglot);
