@@ -10,6 +10,7 @@ import typeDefs from './schemas';
 import userController from './components/users/controller';
 import friendController from './components/friends/controller';
 import permissions from './schemas/permissions';
+import models from './models';
 
 const app = express();
 const data = fileSystem.readFileSync('./locales/pt-br.json', 'utf8');
@@ -38,7 +39,10 @@ const schema = makeExecutableSchema({
 
 const server = new ApolloServer({
 	schema: applyMiddleware(schema, permissions),
-	context: ({ req }) => ({ user: req.user }),
+	context: async ({ req }) => {
+		const userModel = await models.User.findByPk(req.user.id);
+		return { user: userModel };
+	},
 });
 
 server.start().then(() => {
