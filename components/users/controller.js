@@ -1,10 +1,10 @@
-const models = require('../../models');
-const { DATABASE_FIELDS, POLYGLOT } = require('../../utils/constants');
-const { generateMessage } = require('../../utils/helpers');
+import { DATABASE_FIELDS, POLYGLOT } from '../../utils/constants';
+import { generateMessage } from '../../utils/helpers';
+import User from '../../models/User';
 
 const login = async ({ email, password, polyglot }) => {
 	try {
-		const user = await models.User.findOne({ where: { email } });
+		const user = await User.findOne({ where: { email } });
 
 		if (user) {
 			const passwordCheck = await user.isPasswordValid(password);
@@ -32,7 +32,7 @@ const login = async ({ email, password, polyglot }) => {
 
 const register = async ({ user, polyglot }) => {
 	try {
-		const newUser = await models.User.create(user);
+		const newUser = await User.create(user);
 		return { message: polyglot.t('registered', { field: polyglot.t('user') }), user: newUser.toAuthJSON() };
 	} catch (err) {
 		// TODO error handler
