@@ -27,7 +27,7 @@ const schema = makeExecutableSchema({
 	typeDefs,
 	resolvers: {
 		Query: {
-			hello: () => 'Hello',
+			getFriends: async (_, { page, limit }, { user }) => friendController.getFriends({ page, limit, user }), // eslint-disable-line max-len
 		},
 		Mutation: {
 			addFriend: async (_, { friendId }, { user }) => friendController.addFriend({ friendId, polyglot, user }), // eslint-disable-line max-len
