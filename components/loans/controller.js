@@ -1,4 +1,4 @@
-const models = require('../../models');
+import { Friend, Loan } from '../../models';
 const { generateMessage, handleData } = require('../../utils/helpers');
 const { PAGINATION, DATABASE_FIELDS, POLYGLOT: { REGISTERED, DEBT } } = require('../../utils/constants');
 
@@ -28,8 +28,8 @@ const save = async (req, res, next, polyglot) => {
 	const friendId = isMyDebt ? creditor_id : debtor_id;
 	try {
 		const loan = buildLoan(req, user, isMyDebt);
-		const savedLoan = await models.Loan.create(loan);
-		await models.Friend.findOrCreate({
+		const savedLoan = await Loan.create(loan);
+		await Friend.findOrCreate({
 			where: {
 				userId: user.id,
 				friendId,
@@ -78,7 +78,7 @@ const getLoans = async (req, res, next, field) => {
 	}
 
 	try {
-		const loans = await models.Loan.findAll(options);
+		const loans = await Loan.findAll(options);
 		const data = handleData(loans, req.route.path, { page, limit });
 		res.send(data);
 	} catch (err) {

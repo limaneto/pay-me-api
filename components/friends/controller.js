@@ -1,4 +1,4 @@
-const models = require('../../models');
+import { User } from '../../models';
 const { PAGINATION, POLYGLOT, DATABASE_FIELDS } = require('../../utils/constants');
 const { generateMessage, handleData } = require('../../utils/helpers');
 

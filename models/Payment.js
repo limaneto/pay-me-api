@@ -1,30 +1,31 @@
-module.exports = (sequelize, DataTypes) => {
-	const Payment = sequelize.define('Payment', {
-		id: {
-			type: DataTypes.UUID,
-			defaultValue: DataTypes.UUIDV4,
-			primaryKey: true,
-		},
-		value: {
-			type: DataTypes.FLOAT,
-			allowNull: false,
-		},
-		datePaid: {
-			type: DataTypes.DATEONLY,
-		},
-		paymentReceived: {
-			type: DataTypes.BOOLEAN,
-		},
-		description: {
-			type: DataTypes.STRING,
-		},
-	}, { paranoid: true });
+import Sequelize from 'sequelize';
+import sequelize from '../database/instance';
 
-	/* Class methods */
+const Payment = sequelize.define('Payment', {
+	id: {
+		type: Sequelize.DataTypes.UUID,
+		defaultValue: Sequelize.DataTypes.UUIDV4,
+		primaryKey: true,
+	},
+	value: {
+		type: Sequelize.DataTypes.FLOAT,
+		allowNull: false,
+	},
+	datePaid: {
+		type: Sequelize.DataTypes.DATEONLY,
+	},
+	paymentReceived: {
+		type: Sequelize.DataTypes.BOOLEAN,
+	},
+	description: {
+		type: Sequelize.DataTypes.STRING,
+	},
+}, { paranoid: true });
 
-	Payment.associate = function (models) {
-		Payment.belongsTo(models.Loan);
-	};
+/* Class methods */
 
-	return Payment;
+Payment.associate = function associate(models) {
+	Payment.belongsTo(models.Loan);
 };
+
+export default Payment;

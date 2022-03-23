@@ -1,6 +1,6 @@
 import { DATABASE_FIELDS, POLYGLOT } from '../../utils/constants';
 import { generateMessage } from '../../utils/helpers';
-import User from '../../models/User';
+import { User } from '../../models';
 
 const login = async ({ email, password, polyglot }) => {
 	try {

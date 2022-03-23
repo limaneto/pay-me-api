@@ -1,4 +1,4 @@
-const { Payment } = require('../../models');
+import { Payment } from  '../../models';
 const { generateMessage } = require('../../utils/helpers');
 const { PAGINATION, DATABASE_FIELDS, POLYGLOT: { REGISTERED, DEBT } } = require('../../utils/constants');
 

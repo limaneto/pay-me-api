@@ -1,21 +1,26 @@
-module.exports = (sequelize, DataTypes) => sequelize.define('Friend', {
+import Sequelize from 'sequelize';
+import sequelize from '../database/instance';
+
+const Friend = sequelize.define('Friend', {
 	id: {
-		type: DataTypes.UUID,
-		defaultValue: DataTypes.UUIDV4,
+		type: Sequelize.DataTypes.UUID,
+		defaultValue: Sequelize.DataTypes.UUIDV4,
 		primaryKey: true,
 	},
 	userId: {
-		type: DataTypes.INTEGER,
+		type: Sequelize.DataTypes.INTEGER,
 		references: {
 			model: 'Users',
 			key: 'id',
 		},
 	},
 	friendId: {
-		type: DataTypes.INTEGER,
+		type: Sequelize.DataTypes.INTEGER,
 		references: {
 			model: 'Users',
 			key: 'id',
 		},
 	},
 });
+
+export default Friend;

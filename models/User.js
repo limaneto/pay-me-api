@@ -50,10 +50,11 @@ User.beforeCreate((user) => {
 	user.password = bcrypt.hashSync(user.password, 10); // eslint-disable-line no-param-reassign
 });
 
-// User.associate = (models) => {
-// 	User.belongsToMany(User, { as: 'friends', through: models.Friend });
-// 	User.hasMany(models.Loan);
-// };
+User.associate = (models) => {
+	User.belongsToMany(User, { as: 'friends', through: models.Friend });
+	User.belongsToMany(User, { as: 'users', through: models.Friend });
+	User.hasMany(models.Loan);
+};
 
 /* Instance Methods */
 
