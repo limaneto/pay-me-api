@@ -1,5 +1,6 @@
 {
   "500": "Servidor está momentaneamente indisponível",
+  "unknown_error": "Um erro desconhecido aconteceu.",
   "registered": "%{field} registrado com sucesso",
   "deleted": "%{field} deletado com sucesso",
   "edited": "%{field} atualizado com sucesso",

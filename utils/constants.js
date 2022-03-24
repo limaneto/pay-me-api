@@ -6,6 +6,7 @@ module.exports = {
 		UNIQUE_CONSTRAINT: 'unique violation',
 	},
 	POLYGLOT: {
+		UNKNOWN_ERROR: 'unknown-error',
 		WRONG_PASSWORD: 'wrong-password',
 		FIELD_INVALID: 'field-invalid',
 		FIELD_REQUIRED: 'field-required',

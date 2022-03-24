@@ -33,7 +33,12 @@ const login = async ({ email, password, polyglot }) => {
 		};
 
 	} catch (err) {
-		// TODO add error handler
+		return {
+			__typeName: 'Error',
+			error: {
+				message: generateMessage(polyglot, POLYGLOT.UNKNOWN_ERROR),
+			},
+		};
 	}
 };
 
