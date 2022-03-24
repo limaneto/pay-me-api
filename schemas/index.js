@@ -52,40 +52,46 @@ export default gql`
       hello: String
   }
 
-  type Mutation {
-			addFriend(friendId: String!): BaseResponse!
-      register(user: UserInput): RegisterResponse!
-			login(email: String! password: String!): LoginResponse!
-  }
-	
-	type BaseResponse {
+	type Message {
 			message: String!
 	}
 	
+	type Login {
+			message: String!
+			token: String!
+	}
+	
 	type Error {
+			error: Message!
+	}
+	
+	type ErrorKey {
 			key: String!
 			message: String!
 	}
 	
-	type ErrorResponse {
-			message: String
-			fields: [Error]
+	type Errors {
+			errors: [ErrorKey!]!
 	}
 	
-  type RegisterResponse {
-      message: String!
-			user: UserResponse!
+	union LoginResponse = Login | Error | Errors
+	
+  type Mutation {
+			addFriend(friendId: String!): Message!
+      register(user: UserInput): RegisterResponse!
+			login(email: String! password: String!): LoginResponse!
   }
 	
-	type LoginResponse {
-			message: String
-			token: String
-			errors: ErrorResponse
-	}
+   type Register {
+      message: String
+			user: UserResponse
+  }
 	
 	type UserResponse {
 			id: ID!
 			email: String!
 			token: String!
 	}
+	
+	union RegisterResponse = Register | Errors 
 `;

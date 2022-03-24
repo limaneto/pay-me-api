@@ -3,26 +3,17 @@ const { PAGINATION, POLYGLOT, DATABASE_FIELDS } = require('../../utils/constants
 const { generateMessage, handleData } = require('../../utils/helpers');
 
 const addFriend = async ({ friendId, polyglot, user }) => {
-	if (!friendId) {
-		return {
-			errors: {
-				fields: [{
-					key: DATABASE_FIELDS.FRIEND_ID,
-					message: generateMessage(polyglot, POLYGLOT.FIELD_REQUIRED, DATABASE_FIELDS.FRIEND_ID),
-				}],
-			},
-		};
-	}
 	try {
-		const friend = await models.User.findByPk(friendId);
-		if (!friend) {
+		const userWithFriendId = await User.findByPk(friendId);
+		if (!userWithFriendId) {
 			return {
 				errors: {
 					message: generateMessage(polyglot, POLYGLOT.NOT_FOUND, DATABASE_FIELDS.USER),
 				},
 			};
 		}
-		await user.addFriend(friend);
+		const response = await user.addFriend(userWithFriendId);
+		console.log(response);
 		return {
 			message: generateMessage(polyglot, POLYGLOT.REGISTERED, DATABASE_FIELDS.FRIEND),
 		};
@@ -67,16 +58,11 @@ const getFriendsByEmail = async (req, res, next) => {
 	}
 };
 
-const getFriends = async (req, res, next) => {
-	const { user } = req;
-	const { page = 1, limit = PAGINATION.LIMIT } = req.query;
-
+const getFriends = async ({ page = 1, limit = PAGINATION.LIMIT, user }) => {
 	try {
-		const friends = await user.getFriends({ ...getFriendsBaseParams(page, limit) });
-		const data = handleData(friends, req.route.path, { page, limit });
-		res.status(200).send(data);
+		return await user.getFriends();
 	} catch (err) {
-		return next(err);
+		return err;
 	}
 };
 

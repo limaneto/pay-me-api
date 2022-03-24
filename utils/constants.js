@@ -15,6 +15,9 @@ module.exports = {
 		NOT_FOUND: 'not-found',
 		DEBT: 'debt',
 	},
+	POLYGLOT_SEQUELIZE: {
+		isEmail: 'field-invalid',
+	},
 	DATABASE_FIELDS: {
 		FIRST_NAME: 'firstName',
 		LAST_NAME: 'lastName',
@@ -24,6 +27,7 @@ module.exports = {
 		FRIEND_ID: 'friendId',
 		DEBTOR: 'debtor',
 		CREDITOR: 'creditor',
+		EMAIL: 'email',
 	},
 	PAGINATION: {
 		LIMIT: 10,

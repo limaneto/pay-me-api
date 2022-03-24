@@ -1,4 +1,4 @@
-import { DATABASE_FIELDS, POLYGLOT } from '../../utils/constants';
+import { DATABASE_FIELDS, POLYGLOT, POLYGLOT_SEQUELIZE } from '../../utils/constants';
 import { generateMessage } from '../../utils/helpers';
 import { User } from '../../models';
 
@@ -10,20 +10,27 @@ const login = async ({ email, password, polyglot }) => {
 			const passwordCheck = await user.isPasswordValid(password);
 			if (passwordCheck) {
 				const newToken = user.generateJWT();
-				return { message: generateMessage(polyglot, 'logged', 'user'), token: newToken };
+				return {
+					__typeName: 'Login',
+					message: generateMessage(polyglot, 'logged', 'user'),
+					token: newToken,
+				};
 			}
 			return {
-				errors: {
-					fields: [{
-						key: DATABASE_FIELDS.PASSWORD,
-						message: generateMessage(polyglot, POLYGLOT.WRONG_PASSWORD),
-					},
-					],
-				},
+				__typeName: 'Errors',
+				errors: [{
+					key: DATABASE_FIELDS.PASSWORD,
+					message: generateMessage(polyglot, POLYGLOT.WRONG_PASSWORD),
+				}],
 			};
 
 		}
-		return { errors: { message: generateMessage(polyglot, 'not-found', 'user') } };
+		return {
+			__typeName: 'Error',
+			error: {
+				message: generateMessage(polyglot, 'not-found', 'user'),
+			},
+		};
 
 	} catch (err) {
 		// TODO add error handler
@@ -33,10 +40,23 @@ const login = async ({ email, password, polyglot }) => {
 const register = async ({ user, polyglot }) => {
 	try {
 		const newUser = await User.create(user);
-		return { message: polyglot.t('registered', { field: polyglot.t('user') }), user: newUser.toAuthJSON() };
-	} catch (err) {
-		// TODO error handler
-		console.log('err', err);
+		return {
+			__typeName: 'Register',
+			message: polyglot.t('registered', { field: polyglot.t('user') }),
+			user: newUser.toAuthJSON(),
+		};
+	} catch (SequelizeValidationError) {
+		const { errors } = SequelizeValidationError;
+		return {
+			__typeName: 'Errors',
+			errors: errors.map((error) => {
+				const field = error.path;
+				return {
+					key: DATABASE_FIELDS[field.toUpperCase()],
+					message: generateMessage(polyglot, POLYGLOT_SEQUELIZE[error.validatorName], field),
+				};
+			}),
+		};
 	}
 };
 

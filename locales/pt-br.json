@@ -4,6 +4,7 @@
   "deleted": "%{field} deletado com sucesso",
   "edited": "%{field} atualizado com sucesso",
   "logged": "%{field} logado com sucesso",
+  "email_invalid": "Email inválido",
   "wrong-password": "Senha incorreta",
   "model-not-found": "%{field} não foi encontrado",
   "field-required": "%{field} é um campo obrigatório",
