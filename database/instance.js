@@ -18,7 +18,6 @@ export default sequelize;
 // uncomment for TESTING CONNECTION
 sequelize.authenticate().then(() => {
 	console.log('Connection has been established successfully.');
-	console.log(sequelizeOptions);
 }).catch((e) => {
 	console.log(e);
 });
