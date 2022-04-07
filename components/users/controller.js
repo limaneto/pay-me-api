@@ -26,10 +26,11 @@ const login = async ({ email, password, polyglot }) => {
 
 		}
 		return {
-			__typeName: 'Error',
-			error: {
+			__typeName: 'Errors',
+			errors: [{
+				key: DATABASE_FIELDS.EMAIL,
 				message: generateMessage(polyglot, 'not-found', 'user'),
-			},
+			}],
 		};
 
 	} catch (err) {
@@ -58,7 +59,7 @@ const register = async ({ user, polyglot }) => {
 				const field = error.path;
 				return {
 					key: DATABASE_FIELDS[field.toUpperCase()],
-					message: generateMessage(polyglot, POLYGLOT_SEQUELIZE[error.validatorName], field),
+					message: generateMessage(polyglot, POLYGLOT_SEQUELIZE[error.validatorKey], field),
 				};
 			}),
 		};

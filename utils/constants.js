@@ -18,6 +18,7 @@ module.exports = {
 	},
 	POLYGLOT_SEQUELIZE: {
 		isEmail: 'field-invalid',
+		not_unique: 'unique',
 	},
 	DATABASE_FIELDS: {
 		FIRST_NAME: 'firstName',

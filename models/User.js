@@ -51,8 +51,8 @@ User.beforeCreate((user) => {
 });
 
 User.associate = (models) => {
-	User.belongsToMany(User, { as: 'friends', through: models.Friend });
-	User.belongsToMany(User, { as: 'users', through: models.Friend });
+	User.belongsToMany(User, { as: 'friend', through: models.Friend });
+	User.belongsToMany(User, { as: 'user', through: models.Friend });
 	User.hasMany(models.Loan);
 };
 
