@@ -1,4 +1,4 @@
-FROM node:8
+FROM node:16
 
 WORKDIR /usr/src/app
 
@@ -8,6 +8,8 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 5656
+EXPOSE 4000
 
 CMD ["npm", "start"]
+
+#ENTRYPOINT ["docker-entrypoint.sh"]

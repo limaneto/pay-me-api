@@ -11,7 +11,7 @@ const sequelizeOptions = {
 	dialect: 'postgres',
 };
 
-const sequelize = new Sequelize(sequelizeOptions);
+const sequelize = new Sequelize(process.env.DB_URL);
 
 export default sequelize;
 

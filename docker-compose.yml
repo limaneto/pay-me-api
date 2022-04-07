@@ -11,9 +11,30 @@ services:
       - POSTGRES_DB=${DB_NAME}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - database:/var/lib/postgresql/data
+  api:
+    container_name: payme-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file: .env
+    environment:
+      - DB_USER=$DB_USER
+      - DB_PASSWORD=$DB_PASSWORD
+      - DB_NAME=$DB_NAME
+      - DB_HOST=$DB_HOST
+      - DB_HOST_PORT=$DB_HOST_PORT
+      - DB_DIALECT=$DB_DIALECT
+      - AUTH_SECRET=$AUTH_SECRET
+      - DB_URL=$DB_URL
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "4000:4000"
+    depends_on:
+      - payme-database
 volumes:
-  db_data:
+  database:
     driver: local
   
     
