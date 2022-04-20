@@ -21,7 +21,10 @@ app.use(jwt({
 	secret: process.env.AUTH_SECRET,
 	algorithms: ['HS256'],
 	credentialsRequired: false,
-}));
+}), (err, req, res, next) => {
+	if (err.code === 'invalid_token') return next();
+	return next(err);
+});
 
 const schema = makeExecutableSchema({
 	typeDefs,
