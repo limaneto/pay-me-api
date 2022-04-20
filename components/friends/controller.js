@@ -19,18 +19,17 @@ const addFriend = async ({ friendId, polyglot, user }) => {
 			message: generateMessage(polyglot, POLYGLOT.REGISTERED, DATABASE_FIELDS.FRIEND),
 		};
 	} catch (err) {
-		console.log('err', err)
 		if (err.name && err.name.includes('UniqueConstraintError')) {
 			return {
 				__typeError: 'Error',
 				error: {
 					message: generateMessage(polyglot, POLYGLOT.ALREADY_FRIENDS),
-				}
+				},
 			};
 		}
 		return {
 			__typeName: 'Error',
-			error: { message: err.message }
+			error: { message: err.message },
 		};
 	}
 };
