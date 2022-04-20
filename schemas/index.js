@@ -77,7 +77,7 @@ export default gql`
 	union LoginResponse = Login | Error | Errors
 	
   type Mutation {
-			addFriend(friendId: String!): Message!
+			addFriend(friendId: String!): AddFriendResponse!
       register(user: UserInput): RegisterResponse!
 			login(email: String! password: String!): LoginResponse!
   }
@@ -93,5 +93,7 @@ export default gql`
 			token: String!
 	}
 	
-	union RegisterResponse = Register | Errors 
+	union RegisterResponse = Register | Errors
+
+  union AddFriendResponse = Message | Error
 `;
