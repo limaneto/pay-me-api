@@ -7,25 +7,31 @@ const addFriend = async ({ friendId, polyglot, user }) => {
 		const userWithFriendId = await User.findByPk(friendId);
 		if (!userWithFriendId) {
 			return {
-				errors: {
+				__typeName: 'Error',
+				error: {
 					message: generateMessage(polyglot, POLYGLOT.NOT_FOUND, DATABASE_FIELDS.USER),
 				},
 			};
 		}
-		const response = await user.addFriend(userWithFriendId);
-		console.log(response);
+		await user.addFriend(userWithFriendId);
 		return {
+			__typeName: 'Message',
 			message: generateMessage(polyglot, POLYGLOT.REGISTERED, DATABASE_FIELDS.FRIEND),
 		};
 	} catch (err) {
+		console.log('err', err)
 		if (err.name && err.name.includes('UniqueConstraintError')) {
 			return {
-				errors: {
+				__typeError: 'Error',
+				error: {
 					message: generateMessage(polyglot, POLYGLOT.ALREADY_FRIENDS),
-				},
+				}
 			};
 		}
-		return { errors: { message: err.message } };
+		return {
+			__typeName: 'Error',
+			error: { message: err.message }
+		};
 	}
 };
 
@@ -43,13 +49,14 @@ const getFriendsByEmail = async (req, res, next) => {
 	const { page = 1, limit = PAGINATION.LIMIT, search } = req.query;
 
 	try {
+		const pagination = getFriendsBaseParams(parseInt(page, 10), parseInt(limit, 10));
 		const friends = await user.getFriends({
 			where: {
 				email: {
 					[Op.like]: `${search}%`,
 				},
 			},
-			...getFriendsBaseParams(parseInt(page, 10), parseInt(limit, 10)),
+			...pagination,
 		});
 		const data = handleData(friends, req.route.path, { page, limit, search });
 		return res.status(200).send(data);

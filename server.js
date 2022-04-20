@@ -39,6 +39,11 @@ const schema = makeExecutableSchema({
 				return __typeName;
 			},
 		},
+		AddFriendResponse: {
+			__resolveType({ __typeName }) {
+				return __typeName;
+			},
+		},
 		Query: {
 			getFriends: async (_, { page, limit }, { user }) => friendController.getFriends({ page, limit, user }), // eslint-disable-line max-len
 		},
