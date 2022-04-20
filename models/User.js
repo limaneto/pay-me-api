@@ -2,6 +2,8 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import Sequelize from 'sequelize';
 import sequelize from '../database/instance';
+import Loan from './Loan';
+import Friend from './Friend';
 
 const User = sequelize.define('User', {
 	id: {
@@ -50,11 +52,6 @@ User.beforeCreate((user) => {
 	user.password = bcrypt.hashSync(user.password, 10); // eslint-disable-line no-param-reassign
 });
 
-User.associate = (models) => {
-	User.belongsToMany(User, { as: 'friend', through: models.Friend });
-	User.belongsToMany(User, { as: 'user', through: models.Friend });
-	User.hasMany(models.Loan);
-};
 
 /* Instance Methods */
 
@@ -76,5 +73,13 @@ User.prototype.toAuthJSON = function toAuthJSON() {
 User.prototype.isPasswordValid = async function isPasswordValid(password) {
 	return bcrypt.compare(password, this.password);
 };
+
+
+User.belongsToMany(User, { as: 'friends', through: Friend, foreignKey: 'friendId' });
+User.belongsToMany(User, { as: 'users', through: Friend, foreignKey: 'userId' });
+Loan.belongsTo(User, { as: 'debtor' });
+Loan.belongsTo(User, { as: 'creditor' });
+Loan.belongsTo(User, { as: 'creator' });
+User.hasMany(Loan);
 
 export default User;

@@ -22,10 +22,4 @@ const Payment = sequelize.define('Payment', {
 	},
 }, { paranoid: true });
 
-/* Class methods */
-
-Payment.associate = function associate(models) {
-	Payment.belongsTo(models.Loan);
-};
-
 export default Payment;
