@@ -67,7 +67,14 @@ const getFriendsByEmail = async (req, res, next) => {
 
 const getFriends = async ({ page = 1, limit = PAGINATION.LIMIT, user }) => {
 	try {
-		return await user.getFriends();
+		return await user.getFriends({
+			order: [[
+				'firstName', 'ASC',
+			]],
+			limit,
+			page,
+			offset: limit * (page - 1),
+		});
 	} catch (err) {
 		return err;
 	}
