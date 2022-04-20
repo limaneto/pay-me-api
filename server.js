@@ -46,6 +46,7 @@ const schema = makeExecutableSchema({
 		},
 		Query: {
 			getFriends: async (_, { page, limit }, { user }) => friendController.getFriends({ page, limit, user }), // eslint-disable-line max-len
+			getFriendsByEmail: async (_, { search, page, limit }, { user }) => friendController.getFriendsByEmail({ search, page, limit, user }), // eslint-disable-line max-len
 		},
 		Mutation: {
 			addFriend: async (_, { friendId }, { user }) => friendController.addFriend({ friendId, polyglot, user }), // eslint-disable-line max-len

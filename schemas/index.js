@@ -27,6 +27,7 @@ export default gql`
 	
 	type User {
 			id: ID!
+			fullName: String!
       firstName: String!
       lastName: String!
       email: String!
@@ -43,6 +44,7 @@ export default gql`
 	
   type Query {
       getFriends(page: Int!, limit: Int): [User]
+      getFriendsByEmail(search: String!, page: Int!, limit: Int): [User]
       hello: String
   }
 

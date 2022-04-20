@@ -1,6 +1,8 @@
+import { Op } from 'sequelize';
 import { User } from '../../models';
+
 const { PAGINATION, POLYGLOT, DATABASE_FIELDS } = require('../../utils/constants');
-const { generateMessage, handleData } = require('../../utils/helpers');
+const { generateMessage } = require('../../utils/helpers');
 
 const addFriend = async ({ friendId, polyglot, user }) => {
 	try {
@@ -34,33 +36,21 @@ const addFriend = async ({ friendId, polyglot, user }) => {
 	}
 };
 
-const getFriendsBaseParams = (page, limit) => ({
-	order: [['firstName', 'ASC']],
-	limit: limit + 1,
-	offset: limit * (page - 1),
-	attributes: ['id', 'fullName', 'firstName', 'lastName', 'email'],
-	joinTableAttributes: [],
-});
-
-const getFriendsByEmail = async (req, res, next) => {
-	const { Op } = models.Sequelize;
-	const { user } = req;
-	const { page = 1, limit = PAGINATION.LIMIT, search } = req.query;
-
+const getFriendsByEmail = async ({ search, page = 1, limit = PAGINATION.LIMIT, user }) => {
 	try {
-		const pagination = getFriendsBaseParams(parseInt(page, 10), parseInt(limit, 10));
-		const friends = await user.getFriends({
+		return await user.getFriends({
 			where: {
 				email: {
 					[Op.like]: `${search}%`,
 				},
 			},
-			...pagination,
+			order: [['firstName', 'ASC']],
+			limit,
+			offset: limit * (page - 1),
+			joinTableAttributes: [],
 		});
-		const data = handleData(friends, req.route.path, { page, limit, search });
-		return res.status(200).send(data);
 	} catch (err) {
-		return next(err);
+		return err;
 	}
 };
 
