@@ -41,14 +41,8 @@ export default gql`
 			description: String
 	}
 	
-	type Friend {
-			id: ID!
-			userId: ID!
-			friendId: ID!
-	}
-	
   type Query {
-      getFriends(page: Int!, limit: Int): [Friend]
+      getFriends(page: Int, limit: Int): [User]
       hello: String
   }
 
