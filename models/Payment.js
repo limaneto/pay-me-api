@@ -11,15 +11,17 @@ const Payment = sequelize.define('Payment', {
 		type: Sequelize.DataTypes.FLOAT,
 		allowNull: false,
 	},
-	datePaid: {
-		type: Sequelize.DataTypes.DATEONLY,
+	loanId: {
+		type: Sequelize.DataTypes.UUID,
+		references: {
+			model: 'Loans',
+			key: 'id',
+		},
 	},
-	paymentReceived: {
-		type: Sequelize.DataTypes.BOOLEAN,
-	},
-	description: {
-		type: Sequelize.DataTypes.STRING,
-	},
+	datePaid: Sequelize.DataTypes.DATEONLY,
+	paymentReceived: Sequelize.DataTypes.BOOLEAN,
+	description: Sequelize.DataTypes.STRING,
+
 	createdAt: {
 		allowNull: false,
 		type: Sequelize.DataTypes.DATE,

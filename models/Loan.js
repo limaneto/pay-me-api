@@ -8,17 +8,26 @@ const Loan = sequelize.define('Loan', {
 		defaultValue: Sequelize.DataTypes.UUIDV4,
 		primaryKey: true,
 	},
-	createdAt: {
-		allowNull: false,
-		type: Sequelize.DataTypes.DATE,
+	debtorId: {
+		type: Sequelize.DataTypes.UUID,
+		references: {
+			model: 'Users',
+			key: 'id',
+		},
 	},
-	updatedAt: {
-		allowNull: false,
-		type: Sequelize.DataTypes.DATE,
+	creditorId: {
+		type: Sequelize.DataTypes.UUID,
+		references: {
+			model: 'Users',
+			key: 'id',
+		},
 	},
-	deletedAt: {
-		allowNull: true,
-		type: Sequelize.DataTypes.DATE,
+	creatorId: {
+		type: Sequelize.DataTypes.UUID,
+		references: {
+			model: 'Users',
+			key: 'id',
+		},
 	},
 	isActive: { type: Sequelize.DataTypes.BOOLEAN, defaultValue: true },
 	title: { type: Sequelize.DataTypes.STRING(20), allowNull: false },
@@ -31,6 +40,19 @@ const Loan = sequelize.define('Loan', {
 	isPaid: Sequelize.DataTypes.BOOLEAN,
 	dateDue: Sequelize.DataTypes.DATEONLY,
 	dateLoanCompleted: Sequelize.DataTypes.DATEONLY,
+
+	createdAt: {
+		allowNull: false,
+		type: Sequelize.DataTypes.DATE,
+	},
+	updatedAt: {
+		allowNull: false,
+		type: Sequelize.DataTypes.DATE,
+	},
+	deletedAt: {
+		allowNull: true,
+		type: Sequelize.DataTypes.DATE,
+	},
 }, { paranoid: true });
 
 Loan.hasMany(Payment);
