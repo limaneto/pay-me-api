@@ -17,6 +17,14 @@ const Friend = sequelize.define('Friend', {
 			model: 'Users',
 			key: 'id',
 		},
+		createdAt: {
+			allowNull: false,
+			type: Sequelize.DataTypes.DATE,
+		},
+		updatedAt: {
+			allowNull: false,
+			type: Sequelize.DataTypes.DATE,
+		},
 	},
 });
 

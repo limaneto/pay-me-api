@@ -8,6 +8,18 @@ const Loan = sequelize.define('Loan', {
 		defaultValue: Sequelize.DataTypes.UUIDV4,
 		primaryKey: true,
 	},
+	createdAt: {
+		allowNull: false,
+		type: Sequelize.DataTypes.DATE,
+	},
+	updatedAt: {
+		allowNull: false,
+		type: Sequelize.DataTypes.DATE,
+	},
+	deletedAt: {
+		allowNull: true,
+		type: Sequelize.DataTypes.DATE,
+	},
 	isActive: { type: Sequelize.DataTypes.BOOLEAN, defaultValue: true },
 	title: { type: Sequelize.DataTypes.STRING(20), allowNull: false },
 	description: Sequelize.DataTypes.STRING,

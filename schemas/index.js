@@ -18,6 +18,13 @@ export default gql`
       dateLoanCompleted: Date
 	}
 	
+	input LoanInput {
+      title: String!
+      description: String
+      value: Float!
+      dateDue: Date
+	}
+	
 	input UserInput {
       firstName: String!
       lastName: String!
@@ -73,6 +80,7 @@ export default gql`
 	union LoginResponse = Login | Error | Errors
 	
   type Mutation {
+      createLoan(loan: LoanInput! creditorId: ID! debtorId: ID!): Loan!
 			addFriend(friendId: String!): AddFriendResponse!
       register(user: UserInput): RegisterResponse!
 			login(email: String! password: String!): LoginResponse!

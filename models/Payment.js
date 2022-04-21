@@ -20,6 +20,18 @@ const Payment = sequelize.define('Payment', {
 	description: {
 		type: Sequelize.DataTypes.STRING,
 	},
+	createdAt: {
+		allowNull: false,
+		type: Sequelize.DataTypes.DATE,
+	},
+	updatedAt: {
+		allowNull: false,
+		type: Sequelize.DataTypes.DATE,
+	},
+	deletedAt: {
+		allowNull: true,
+		type: Sequelize.DataTypes.DATE,
+	},
 }, { paranoid: true });
 
 export default Payment;
