@@ -15,6 +15,8 @@ const permissions = shield({
 		login: allow,
 		register: allow,
 	},
+}, {
+	debug: true,
 });
 
 export default permissions;
