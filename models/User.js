@@ -36,6 +36,7 @@ const User = sequelize.define('User', {
 		type: Sequelize.DataTypes.STRING,
 		allowNull: false,
 	},
+
 	createdAt: {
 		allowNull: false,
 		type: Sequelize.DataTypes.DATE,
@@ -80,6 +81,6 @@ User.belongsToMany(User, { as: 'users', through: Friend, foreignKey: 'userId' })
 Loan.belongsTo(User, { as: 'debtor' });
 Loan.belongsTo(User, { as: 'creditor' });
 Loan.belongsTo(User, { as: 'creator' });
-User.hasMany(Loan);
+User.hasMany(Loan, { foreignKey: 'id' });
 
 export default User;
