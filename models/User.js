@@ -4,6 +4,7 @@ import Sequelize from 'sequelize';
 import sequelize from '../database/instance';
 import Loan from './Loan';
 import Friend from './Friend';
+import Payment from './Payment';
 
 const User = sequelize.define('User', {
 	id: {
@@ -82,5 +83,7 @@ Loan.belongsTo(User, { as: 'debtor' });
 Loan.belongsTo(User, { as: 'creditor' });
 Loan.belongsTo(User, { as: 'creator' });
 User.hasMany(Loan, { foreignKey: 'id' });
+User.hasMany(Payment, { as: 'creator', foreignKey: 'creatorId' });
+Payment.belongsTo(User, { as: 'creator', foreignKey: 'creatorId' });
 
 export default User;

@@ -21,7 +21,13 @@ const Payment = sequelize.define('Payment', {
 	datePaid: Sequelize.DataTypes.DATEONLY,
 	paymentReceived: Sequelize.DataTypes.BOOLEAN,
 	description: Sequelize.DataTypes.STRING,
-
+	creatorId: {
+		type: Sequelize.DataTypes.UUID,
+		references: {
+			model: 'Users',
+			key: 'id',
+		},
+	},
 	createdAt: {
 		allowNull: false,
 		type: Sequelize.DataTypes.DATE,
