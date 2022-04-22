@@ -50,6 +50,8 @@ export default gql`
 	}
 	
   type Query {
+			getMyCredits(page: Int!, limit: Int): [Loan]
+			getMyDebts(page: Int!, limit: Int): [Loan]
       getFriends(page: Int!, limit: Int): [User]
       getFriendsByEmail(search: String!, page: Int!, limit: Int): [User]
       hello: String

@@ -55,16 +55,14 @@ const getWhereClause = (field, user) => {
 	}
 };
 
-const getLoans = async (req, res, next, field) => {
-	const { user } = req;
-	let { page = 1, limit = PAGINATION.LIMIT } = req.query;
+const getLoans = async ({ page = 1, limit = PAGINATION.LIMIT, user, field }) => {
 	page = parseInt(page);
 	limit = parseInt(limit);
 	const options = {
 		order: [
 			['createdAt', 'DESC'],
 		],
-		limit: limit + 1,
+		limit: limit,
 		offset:  limit * (page - 1),
 		where: getWhereClause(field, user),
 		include: ['debtor', 'creditor']
@@ -72,19 +70,18 @@ const getLoans = async (req, res, next, field) => {
 
 	try {
 		const loans = await Loan.findAll(options);
-		const data = handleData(loans, req.route.path, { page, limit });
-		res.send(data);
+		return loans;
 	} catch (err) {
-		return next(err);
+		return err;
 	}
 };
 
-const getMyDebts = async (req, res, next) => {
-	return getLoans(req, res, next, DATABASE_FIELDS.DEBTOR);
+const getMyDebts = async ({ page = 1, limit = PAGINATION.LIMIT, user }) => {
+	return getLoans({ page, limit, user, field: DATABASE_FIELDS.DEBTOR });
 };
 
-const getMyCredits = async (req, res, next) => {
-	return getLoans(req, res, next, DATABASE_FIELDS.CREDITOR);
+const getMyCredits = async ({ page = 1, limit = PAGINATION.LIMIT, user }) => {
+	return getLoans({ page, limit, user, field: DATABASE_FIELDS.CREDITOR });
 };
 
 module.exports = {

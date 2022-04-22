@@ -65,6 +65,8 @@ const schema = makeExecutableSchema({
 			},
 		},
 		Query: {
+			getMyCredits: async (_, { page, limit }, { user }) => loanController.getMyCredits({ page, limit, user }), // eslint-disable-line max-len
+			getMyDebts: async (_, { page, limit }, { user }) => loanController.getMyDebts({ page, limit, user }), // eslint-disable-line max-len
 			getFriends: async (_, { page, limit }, { user }) => friendController.getFriends({ page, limit, user }), // eslint-disable-line max-len
 			getFriendsByEmail: async (_, { search, page, limit }, { user }) => friendController.getFriendsByEmail({ search, page, limit, user }), // eslint-disable-line max-len
 		},
