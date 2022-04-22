@@ -13,6 +13,7 @@ import userController from './components/users/controller';
 import friendController from './components/friends/controller';
 import permissions from './schemas/permissions';
 import User from './models/User';
+import { serializeDate } from './utils/helpers';
 
 const app = express();
 const data = fileSystem.readFileSync('./locales/pt-br.json', 'utf8');
@@ -38,13 +39,8 @@ const schema = makeExecutableSchema({
 				return new Date(value); // value from the client
 			},
 			serialize(value) {
-				return value.getTime(); // value sent to the client
-			},
-			parseLiteral(ast) {
-				if (ast.kind === Kind.INT) {
-					return parseInt(ast.value, 10); // ast value is always in string format
-				}
-				return null;
+				if (typeof value === 'string') return value;
+				return serializeDate(value); // value sent to the client
 			},
 		}),
 		LoginResponse: {
