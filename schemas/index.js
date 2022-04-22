@@ -80,7 +80,7 @@ export default gql`
 	union LoginResponse = Login | Error | Errors
 	
   type Mutation {
-      createLoan(loan: LoanInput! creditorId: ID! debtorId: ID!): Loan!
+      createLoan(loan: LoanInput! creditorId: ID! debtorId: ID!): CreateLoanResponse!
 			addFriend(friendId: String!): AddFriendResponse!
       register(user: UserInput): RegisterResponse!
 			login(email: String! password: String!): LoginResponse!
@@ -100,4 +100,6 @@ export default gql`
 	union RegisterResponse = Register | Errors
 
   union AddFriendResponse = Message | Error
+
+  union CreateLoanResponse = Loan | Error
 `;

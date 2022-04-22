@@ -1,46 +1,39 @@
-import { Friend, Loan } from '../../models';
+import { Loan, User } from '../../models';
+import { POLYGLOT } from '../../utils/constants';
 const { generateMessage, handleData } = require('../../utils/helpers');
-const { PAGINATION, DATABASE_FIELDS, POLYGLOT: { REGISTERED, DEBT } } = require('../../utils/constants');
+const { PAGINATION, DATABASE_FIELDS } = require('../../utils/constants');
 
 // TODO criar endpoint pra aceitar Loan
 // TODO criar endpoint pra recusar Loan
 
-const acceptLoan = () => {
-	return { creditAccepted: true, debtAccepted: true };
-};
-
-const addUsersIdsToLoan = (req) => {
-	const { debtor_id, creditor_id } = req.body;
-	return { creditorId: creditor_id, debtorId: debtor_id };
-};
-
-const buildLoan = (req, user, isMyDebt) => {
-	let loan = { ...req.body };
-	if (isMyDebt) {
-		loan = { ...loan, ...acceptLoan(req) };
-	}
-	return { ...loan, creatorId: user.id, ...addUsersIdsToLoan(req) };
-}
-
-const save = async (req, res, next, polyglot) => {
-	const { user, body: { debtor_id, creditor_id } } = req;
-	const isMyDebt = user.id === debtor_id;
-	const friendId = isMyDebt ? creditor_id : debtor_id;
+const createLoan = async ({ creditorId, debtorId, loan, user }) => {
+	const isMyDebt = user.id === debtorId;
+	const friendId = isMyDebt ? creditorId : debtorId;
+	
+	let loanReassigned = { ...loan }; 
+	
 	try {
-		const loan = buildLoan(req, user, isMyDebt);
-		const savedLoan = await Loan.create(loan);
-		await Friend.findOrCreate({
-			where: {
-				userId: user.id,
-				friendId,
-			},
-		});
-		return res.send({
-			message: generateMessage(polyglot, REGISTERED, DEBT),
-			savedLoan,
-		});
+		loanReassigned = { ...loanReassigned, creatorId: user.id, creditorId, debtorId };
+
+		if (isMyDebt) {
+			loanReassigned = { ...loanReassigned, creditAccepted: true, debtAccepted: true };
+		}
+		
+		const savedLoan = await Loan.create(loanReassigned);
+		const userWithFriendId = await User.findByPk(friendId);
+		await user.addFriend(userWithFriendId);
+		return {
+			__typeName: 'Loan',
+			...savedLoan.toJSON(),
+		};
 	} catch (err) {
-		return next(err);
+		console.log('err', err)
+		return {
+			__typeName: 'Error',
+			error: {
+				message: generateMessage(polyglot, POLYGLOT.UNKNOWN_ERROR),
+			},
+		};
 	}
 };
 
@@ -95,7 +88,7 @@ const getMyCredits = async (req, res, next) => {
 };
 
 module.exports = {
-	save,
+	createLoan,
 	getLoans,
 	getMyDebts,
 	getMyCredits,

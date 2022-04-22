@@ -11,6 +11,7 @@ import fileSystem from 'fs';
 import typeDefs from './schemas';
 import userController from './components/users/controller';
 import friendController from './components/friends/controller';
+import loanController from './components/loans/controller';
 import permissions from './schemas/permissions';
 import User from './models/User';
 import { serializeDate } from './utils/helpers';
@@ -58,11 +59,17 @@ const schema = makeExecutableSchema({
 				return __typeName;
 			},
 		},
+		CreateLoanResponse: {
+			__resolveType({ __typeName }) {
+				return __typeName;
+			},
+		},
 		Query: {
 			getFriends: async (_, { page, limit }, { user }) => friendController.getFriends({ page, limit, user }), // eslint-disable-line max-len
 			getFriendsByEmail: async (_, { search, page, limit }, { user }) => friendController.getFriendsByEmail({ search, page, limit, user }), // eslint-disable-line max-len
 		},
 		Mutation: {
+			createLoan: async (_, { creditorId, debtorId, loan }, { user }) => loanController.createLoan({ loan, creditorId, debtorId, user }), // eslint-disable-line max-len
 			addFriend: async (_, { friendId }, { user }) => friendController.addFriend({ friendId, polyglot, user }), // eslint-disable-line max-len
 			register: async (_, { user }) => userController.register({ polyglot, user }), // eslint-disable-line max-len
 			login: async (_, { email, password }) => userController.login({ email, password, polyglot }),
