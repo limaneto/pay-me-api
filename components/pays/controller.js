@@ -1,37 +1,32 @@
-import { Payment } from  '../../models';
+import { Payment, Loan } from  '../../models';
+import { POLYGLOT } from '../../utils/constants';
 const { generateMessage } = require('../../utils/helpers');
-const { PAGINATION, DATABASE_FIELDS, POLYGLOT: { REGISTERED, DEBT } } = require('../../utils/constants');
+const { POLYGLOT: { REGISTERED, DEBT } } = require('../../utils/constants');
 
-function acceptDebtOrCredit(req) {
-	const { body, user } = req;
-	if (body.isDebt) {
-		return {
-			debtAccepted: true,
-			debtor: user._id,
-		};
+const createPayment = async({ payment, user, polyglot }) => {
+	const loan = await Loan.findByPk(payment.loanId);
+	
+	if (!loan.debtAccepted && user.id === loan.debtorId) {
+		await loan.update({ debtAccepted: true });
 	}
-
-	return {
-		creditAccepted: true,
-		creditor: user._id,
-	};
-}
-
-const save = (req, res, next, polyglot) => {
-	let pay = { ...req.body };
-	pay = { ...pay, ...acceptDebtOrCredit(req) };
-	pay = { ...pay, creator: user._id };
-
-	// TODO add new value to existing Payment when user wants to divide in smaller payments
+	
+	let paymentReassigned = { ...payment, creator: user._id };
+	
 	// TODO marcar Loan como pago se valor do Payment for igual valor do Loan
 	try {
-		const savedPay = Payment.create(pay);
-		return res/send({
+		const savedPay = await Payment.create(paymentReassigned);
+		return {
+			__typeName: 'Payment',
 			message: generateMessage(polyglot, REGISTERED, DEBT),
-			savedPay
-		})
+			...savedPay.toJSON()
+		}
 	} catch (err) {
-		return next(err);
+		return {
+			__typeName: 'Error',
+			error: {
+				message: generateMessage(polyglot, POLYGLOT.UNKNOWN_ERROR),
+			},
+		};
 	}
 };
 
@@ -125,5 +120,5 @@ const getAllDebtsByUser = (req, res, next, polyglot) => {
 
 
 module.exports = {
-	save, getAllByUser, getAllPays, getAllCreditsByUser, getAllDebtsByUser,
+	createPayment, getAllByUser, getAllPays, getAllCreditsByUser, getAllDebtsByUser,
 };

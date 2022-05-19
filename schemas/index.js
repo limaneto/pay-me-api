@@ -49,6 +49,13 @@ export default gql`
 			description: String
 	}
 	
+	input PaymentInput {
+      value: Float!
+      datePaid: Date
+      paymentReceived: Boolean
+      description: String
+	}
+	
   type Query {
 			getMyCredits(page: Int!, limit: Int): [Loan]
 			getMyDebts(page: Int!, limit: Int): [Loan]
@@ -82,6 +89,7 @@ export default gql`
 	union LoginResponse = Login | Error | Errors
 	
   type Mutation {
+			createPayment(loanId: ID! payment: PaymentInput!): CreatePaymentResponse!
       createLoan(loan: LoanInput! creditorId: ID! debtorId: ID!): CreateLoanResponse!
 			addFriend(friendId: String!): AddFriendResponse!
       register(user: UserInput): RegisterResponse!
@@ -104,4 +112,6 @@ export default gql`
   union AddFriendResponse = Message | Error
 
   union CreateLoanResponse = Loan | Error
+  
+	union CreatePaymentResponse = Payment | Error
 `;

@@ -12,6 +12,7 @@ import typeDefs from './schemas';
 import userController from './components/users/controller';
 import friendController from './components/friends/controller';
 import loanController from './components/loans/controller';
+import paymentController from './components/pays/controller';
 import permissions from './schemas/permissions';
 import User from './models/User';
 import { serializeDate } from './utils/helpers';
@@ -64,6 +65,11 @@ const schema = makeExecutableSchema({
 				return __typeName;
 			},
 		},
+		CreatePaymentResponse: {
+			__resolveType({ __typeName }) {
+				return __typeName;
+			},
+		},
 		Query: {
 			getMyCredits: async (_, { page, limit }, { user }) => loanController.getMyCredits({ page, limit, user }), // eslint-disable-line max-len
 			getMyDebts: async (_, { page, limit }, { user }) => loanController.getMyDebts({ page, limit, user }), // eslint-disable-line max-len
@@ -71,6 +77,7 @@ const schema = makeExecutableSchema({
 			getFriendsByEmail: async (_, { search, page, limit }, { user }) => friendController.getFriendsByEmail({ search, page, limit, user }), // eslint-disable-line max-len
 		},
 		Mutation: {
+			createPayment: async (_, { loanId, payment }, { user }) => paymentController.createPayment({ payment: { ...payment, loanId }, polyglot, user }), // eslint-disable-line max-len
 			createLoan: async (_, { creditorId, debtorId, loan }, { user }) => loanController.createLoan({ loan, creditorId, debtorId, user }), // eslint-disable-line max-len
 			addFriend: async (_, { friendId }, { user }) => friendController.addFriend({ friendId, polyglot, user }), // eslint-disable-line max-len
 			register: async (_, { user }) => userController.register({ polyglot, user }), // eslint-disable-line max-len
