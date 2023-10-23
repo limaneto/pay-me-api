@@ -1,7 +1,6 @@
 import { applyMiddleware } from 'graphql-middleware';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { GraphQLScalarType } from 'graphql';
-import { Kind } from 'graphql/language';
 import { ApolloServer } from 'apollo-server-express';
 import Polyglot from 'node-polyglot';
 import express from 'express';

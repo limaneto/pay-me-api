@@ -7,11 +7,11 @@ const sequelizeOptions = {
 	database: process.env.DB_NAME,
 	password: process.env.DB_PASSWORD,
 	host: process.env.DB_HOST,
-	port: process.env.DB_HOST_PORT,
+	port: process.env.DB_PORT,
 	dialect: 'postgres',
 };
 
-const sequelize = new Sequelize(process.env.DB_URL);
+const sequelize = new Sequelize(sequelizeOptions);
 
 export default sequelize;
 
