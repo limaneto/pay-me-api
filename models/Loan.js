@@ -55,7 +55,7 @@ const Loan = sequelize.define('Loan', {
 	},
 }, { paranoid: true });
 
-Loan.hasMany(Payment);
-Payment.belongsTo(Loan);
+Loan.hasMany(Payment, { as: 'loan', foreignKey: 'loanId' });
+Payment.belongsTo(Loan, { as: 'loan', foreignKey: 'loanId' });
 
 export default Loan;

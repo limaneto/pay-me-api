@@ -9,16 +9,16 @@ const { PAGINATION, DATABASE_FIELDS } = require('../../utils/constants');
 const createLoan = async ({ creditorId, debtorId, loan, user }) => {
 	const isMyDebt = user.id === debtorId;
 	const friendId = isMyDebt ? creditorId : debtorId;
-	
-	let loanReassigned = { ...loan }; 
-	
+
+	let loanReassigned = { ...loan };
+
 	try {
 		loanReassigned = { ...loanReassigned, creatorId: user.id, creditorId, debtorId };
 
 		if (isMyDebt) {
 			loanReassigned = { ...loanReassigned, creditAccepted: true, debtAccepted: true };
 		}
-		
+
 		const savedLoan = await Loan.create(loanReassigned);
 		const userWithFriendId = await User.findByPk(friendId);
 		await user.addFriend(userWithFriendId);
@@ -69,8 +69,7 @@ const getLoans = async ({ page = 1, limit = PAGINATION.LIMIT, user, field }) => 
 	}
 
 	try {
-		const loans = await Loan.findAll(options);
-		return loans;
+		return await Loan.findAll(options);
 	} catch (err) {
 		return err;
 	}

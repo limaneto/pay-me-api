@@ -49,22 +49,19 @@ export default gql`
     description: String
 	}
 	
-<<<<<<< Updated upstream
-=======
 	input PaymentInput {
-    value: Float!
-    datePaid: Date
-    paymentReceived: Boolean
-    description: String
+      value: Float!
+      datePaid: Date
+      paymentReceived: Boolean
+      description: String
 	}
 	
->>>>>>> Stashed changes
   type Query {
     getMyCredits(page: Int!, limit: Int): [Loan]
     getMyDebts(page: Int!, limit: Int): [Loan]
     getFriends(page: Int!, limit: Int): [User]
     getFriendsByEmail(search: String!, page: Int!, limit: Int): [User]
-    hello: String
+    getAllPayments(loanId: ID!): [Payment]
   }
 
 	type Message {
@@ -92,18 +89,11 @@ export default gql`
 	union LoginResponse = Login | Error | Errors
 	
   type Mutation {
-<<<<<<< Updated upstream
+			createPayment(loanId: ID! payment: PaymentInput!): CreatePaymentResponse!
       createLoan(loan: LoanInput! creditorId: ID! debtorId: ID!): CreateLoanResponse!
 			addFriend(friendId: String!): AddFriendResponse!
       register(user: UserInput): RegisterResponse!
 			login(email: String! password: String!): LoginResponse!
-=======
-    createPayment(loanId: ID! payment: PaymentInput!): CreatePaymentResponse!
-    createLoan(loan: LoanInput! creditorId: ID! debtorId: ID!): CreateLoanResponse!
-    addFriend(friendId: String!): AddFriendResponse!
-    register(user: UserInput): RegisterResponse!
-    login(email: String! password: String!): LoginResponse!
->>>>>>> Stashed changes
   }
 	
    type Register {
@@ -122,4 +112,6 @@ export default gql`
   union AddFriendResponse = Message | Error
 
   union CreateLoanResponse = Loan | Error
+  
+	union CreatePaymentResponse = Payment | Error
 `;
