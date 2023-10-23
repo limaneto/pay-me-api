@@ -1,5 +1,5 @@
 import { Payment, Loan } from  '../../models';
-import { POLYGLOT } from '../../utils/constants';
+import {PAGINATION, POLYGLOT} from '../../utils/constants';
 const { generateMessage } = require('../../utils/helpers');
 const { POLYGLOT: { REGISTERED, DEBT } } = require('../../utils/constants');
 
@@ -32,14 +32,19 @@ const createPayment = async({ payment, user, polyglot }) => {
 // TODO criar endpoint de confirmar Pagamento
 // TODO criar endpoint de deletar/desativar Loan
 
-const getAllPayments = async ({ loanId }) => {
+const getAllPayments = async ({ loanId, page = 1, limit = PAGINATION.LIMIT }) => {
+	page = parseInt(page);
+	limit = parseInt(limit);
+
 	return await Payment.findAll({
 		where: {
 			loanId: loanId
 		},
 		order: [
 			['createdAt', 'DESC'],
-		]
+		],
+		limit: limit,
+		offset:  limit * (page - 1),
 	});
 };
 

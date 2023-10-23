@@ -74,7 +74,7 @@ const schema = makeExecutableSchema({
 			getMyDebts: async (_, { page, limit }, { user }) => loanController.getMyDebts({ page, limit, user }), // eslint-disable-line max-len
 			getFriends: async (_, { page, limit }, { user }) => friendController.getFriends({ page, limit, user }), // eslint-disable-line max-len
 			getFriendsByEmail: async (_, { search, page, limit }, { user }) => friendController.getFriendsByEmail({ search, page, limit, user }), // eslint-disable-line max-len,
-			getAllPayments: async (_, { loanId }) => paymentController.getAllPayments({ loanId }), // eslint-disable-line max-len
+			getAllPayments: async (_, { loanId, page, limit }) => paymentController.getAllPayments({ loanId, page, limit }), // eslint-disable-line max-len
 		},
 		Mutation: {
 			createPayment: async (_, { loanId, payment }, { user }) => paymentController.createPayment({ payment: { ...payment, loanId }, polyglot, user }), // eslint-disable-line max-len
