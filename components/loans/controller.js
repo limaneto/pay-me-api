@@ -16,7 +16,9 @@ const createLoan = async ({ creditorId, debtorId, loan, user }) => {
 		loanReassigned = { ...loanReassigned, creatorId: user.id, creditorId, debtorId };
 
 		if (isMyDebt) {
-			loanReassigned = { ...loanReassigned, creditAccepted: true, debtAccepted: true };
+			loanReassigned = { ...loanReassigned, debtAccepted: true };
+		} else {
+			loanReassigned = { ...loanReassigned, creditAccepted: true };
 		}
 
 		const savedLoan = await Loan.create(loanReassigned);
@@ -37,10 +39,20 @@ const createLoan = async ({ creditorId, debtorId, loan, user }) => {
 	}
 };
 
+// TODO criar endpoint de deletar/desativar Loan
+
 const acceptLoan = async ({ loanId, polyglot, user }) => {
 	try {
-		const loan = await Loan.findOne({ where: { id: loanId, debtorId: user.id } });
-		loan.update({ debtAccepted: true });
+		const loan = await Loan.findOne({ where: { id: loanId } });
+
+		if (loan.debtorId === user.id) {
+			loan.update({ debtAccepted: true });
+		}
+
+		if (loan.creditorId === user.id) {
+			loan.update({ creditAccepted: true });
+		}
+
 		return {
 			__typeName: 'Loan',
 			...loan.toJSON(),
