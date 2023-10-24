@@ -91,6 +91,7 @@ export default gql`
   type Mutation {
     acceptLoan(loanId: ID!): Loan!
     createPayment(loanId: ID! payment: PaymentInput!): CreatePaymentResponse!
+    confirmPayment(paymentId: ID!): ConfirmPaymentResponse!
     createLoan(loan: LoanInput! creditorId: ID! debtorId: ID!): CreateLoanResponse!
     addFriend(friendId: String!): AddFriendResponse!
     register(user: UserInput): RegisterResponse!
@@ -115,4 +116,6 @@ export default gql`
   union CreateLoanResponse = Loan | Error
   
 	union CreatePaymentResponse = Payment | Error
+	
+	union ConfirmPaymentResponse = Payment | Error
 `;
