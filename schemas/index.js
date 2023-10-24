@@ -89,11 +89,12 @@ export default gql`
 	union LoginResponse = Login | Error | Errors
 	
   type Mutation {
-			createPayment(loanId: ID! payment: PaymentInput!): CreatePaymentResponse!
-      createLoan(loan: LoanInput! creditorId: ID! debtorId: ID!): CreateLoanResponse!
-			addFriend(friendId: String!): AddFriendResponse!
-      register(user: UserInput): RegisterResponse!
-			login(email: String! password: String!): LoginResponse!
+    acceptLoan(loanId: ID!): Loan!
+    createPayment(loanId: ID! payment: PaymentInput!): CreatePaymentResponse!
+    createLoan(loan: LoanInput! creditorId: ID! debtorId: ID!): CreateLoanResponse!
+    addFriend(friendId: String!): AddFriendResponse!
+    register(user: UserInput): RegisterResponse!
+    login(email: String! password: String!): LoginResponse!
   }
 	
    type Register {

@@ -1,6 +1,6 @@
 import { Loan, User } from '../../models';
 import { POLYGLOT } from '../../utils/constants';
-const { generateMessage, handleData } = require('../../utils/helpers');
+const { generateMessage } = require('../../utils/helpers');
 const { PAGINATION, DATABASE_FIELDS } = require('../../utils/constants');
 
 // TODO criar endpoint pra aceitar Loan
@@ -28,6 +28,24 @@ const createLoan = async ({ creditorId, debtorId, loan, user }) => {
 		};
 	} catch (err) {
 		console.log('err', err)
+		return {
+			__typeName: 'Error',
+			error: {
+				message: generateMessage(polyglot, POLYGLOT.UNKNOWN_ERROR),
+			},
+		};
+	}
+};
+
+const acceptLoan = async ({ loanId, polyglot, user }) => {
+	try {
+		const loan = await Loan.findOne({ where: { id: loanId, debtorId: user.id } });
+		loan.update({ debtAccepted: true });
+		return {
+			__typeName: 'Loan',
+			...loan.toJSON(),
+		}
+	} catch (err) {
 		return {
 			__typeName: 'Error',
 			error: {
@@ -84,6 +102,7 @@ const getMyCredits = async ({ page = 1, limit = PAGINATION.LIMIT, user }) => {
 };
 
 module.exports = {
+	acceptLoan,
 	createLoan,
 	getLoans,
 	getMyDebts,
