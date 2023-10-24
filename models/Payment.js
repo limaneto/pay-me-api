@@ -19,7 +19,7 @@ const Payment = sequelize.define('Payment', {
 		},
 	},
 	datePaid: Sequelize.DataTypes.DATEONLY,
-	paymentReceived: Sequelize.DataTypes.BOOLEAN,
+	received: Sequelize.DataTypes.BOOLEAN,
 	description: Sequelize.DataTypes.STRING,
 	creatorId: {
 		type: Sequelize.DataTypes.UUID,

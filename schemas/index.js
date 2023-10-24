@@ -45,14 +45,14 @@ export default gql`
     id: ID!
     value: Float!
     datePaid: Date
-    paymentReceived: Boolean
+    received: Boolean
     description: String
 	}
 	
 	input PaymentInput {
       value: Float!
       datePaid: Date
-      paymentReceived: Boolean
+      received: Boolean
       description: String
 	}
 	
